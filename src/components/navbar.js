@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FiShoppingBag, FiUser, FiSearch, FiMenu } from 'react-icons/fi';
+import { IoCloseOutline } from "react-icons/io5";
 
 const Navbar = () => {
     const [isSearchActive, setIsSearchActive] = useState(false);
@@ -9,7 +10,7 @@ const Navbar = () => {
     };
 
     const handleCloseSearch = () => {
-        setIsSearchActive(false); // Correctly close the search
+        setIsSearchActive(false);
     };
 
     return (
@@ -29,30 +30,39 @@ const Navbar = () => {
                         {!isSearchActive ? (
                             <div className="text-4xl font-cormorant font-bold">MINACIA</div>
                         ) : (
-                            <input
-                                type="text"
-                                placeholder="Search"
-                                className="w-2/3 p-2 border border-gray-300 rounded-md focus:outline-none"
-                                autoFocus
-                            />
+                            <div className="flex items-center justify-between w-full">
+                                <div className="text-4xl font-cormorant font-bold">MINACIA</div>
+                                <div className="flex items-center space-x-2">
+                                    <input
+                                        type="text"
+                                        placeholder="Search"
+                                        className="py-1 px-3 border border-gray-300 rounded-lg focus:outline-none w-64" // Changed width here
+                                        autoFocus
+                                    />
+                                    <button
+                                        onClick={handleCloseSearch}
+                                        className="ml-2 text-sm font-semibold cursor-pointer"
+                                    >
+                                        <IoCloseOutline size={20} />
+                                    </button>
+                                </div>
+                            </div>
                         )}
                     </div>
 
                     {/* Right Section */}
                     <div className="flex items-center space-x-4 ml-auto">
-                        <FiShoppingBag size={20} />
-                        <FiUser size={20} />
                         {!isSearchActive ? (
-                            <FiSearch size={20} className="cursor-pointer" onClick={handleSearchClick} />
-                        ) : (
-                            <button onClick={handleCloseSearch} className="text-sm font-semibold cursor-pointer">
-                                Close
-                            </button>
-                        )}
-                        <button className="flex items-center space-x-1">
-                            <FiMenu size={20} />
-                            <span className="text-sm font-semibold">MENU</span>
-                        </button>
+                            <div className="flex items-center space-x-4">
+                                <FiShoppingBag size={20} />
+                                <FiUser size={20} />
+                                <FiSearch size={20} className="cursor-pointer" onClick={handleSearchClick} />
+                                <button className="flex items-center space-x-1">
+                                    <FiMenu size={20} />
+                                    <span className="text-sm font-semibold">MENU</span>
+                                </button>
+                            </div>
+                        ) : null}
                     </div>
                 </div>
             </div>

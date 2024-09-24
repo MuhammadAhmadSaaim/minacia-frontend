@@ -1,5 +1,4 @@
 import React from 'react'
-import Footer from '../components/footer'
 import ServiceSection from '../components/serviceSection'
 
 const Home = () => {
@@ -9,11 +8,9 @@ const Home = () => {
                 Home
             </h1>
             <ServiceSection />
-            <Footer />
-            <Footer />
-            <Footer />
-            <Footer />
-            <Footer />
+            <ServiceSection />
+            <ServiceSection />
+            <ServiceSection />
         </div>
     )
 }

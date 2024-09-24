@@ -1,59 +1,54 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FiShoppingBag, FiUser, FiSearch, FiMenu } from 'react-icons/fi';
 
 const Navbar = () => {
-    const [isScrolled, setIsScrolled] = useState(false);
+    const [isSearchActive, setIsSearchActive] = useState(false);
 
-    // Handle scroll event
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY > 0) {
-                setIsScrolled(true);
-            } else {
-                setIsScrolled(false);
-            }
-        };
+    const handleSearchClick = () => {
+        setIsSearchActive(true);
+    };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
+    const handleCloseSearch = () => {
+        setIsSearchActive(false); // Correctly close the search
+    };
 
     return (
         <div>
-            {/* Large Name centered */}
-            {!isScrolled && (
-                <div className="flex justify-center items-center h-screen">
-                    <h1 className="text-6xl font-cormorant font-bold transition-transform duration-700 ease-in-out transform scale-100">
-                        MINACIA
-                    </h1>
-                </div>
-            )}
-
             {/* Navbar */}
-            <div
-                className={`fixed top-0 w-full bg-white z-10 transition-all duration-500 ease-in-out ${isScrolled ? 'py-4 opacity-100' : 'opacity-0 py-0'
-                    } border-b border-gray-200`}
-            >
-                <div className="flex justify-between items-center px-6">
+            <div className="fixed top-0 w-full bg-white z-10 py-5 shadow-md">
+                <div className="relative flex items-center w-4/5 mx-auto transition-all duration-300">
                     {/* Left Section */}
-                    <div className="flex items-center space-x-2">
+                    <div className={`flex items-center space-x-2 transition-all duration-300 ${isSearchActive ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                         <button className="flex items-center text-sm font-semibold">
                             <span className="mr-1">+</span> Contact Us
                         </button>
                     </div>
 
-                    {/* Center Section */}
-                    <div className={`text-2xl font-cormorant font-bold ${isScrolled ? 'block' : 'hidden'}`}>
-                        MINACIA
+                    {/* Center Section or Search Bar */}
+                    <div className={`absolute transition-all duration-300 ${isSearchActive ? 'left-0' : 'left-1/2 transform -translate-x-1/2'} right-0 mx-auto text-center`}>
+                        {!isSearchActive ? (
+                            <div className="text-4xl font-cormorant font-bold">MINACIA</div>
+                        ) : (
+                            <input
+                                type="text"
+                                placeholder="Search"
+                                className="w-2/3 p-2 border border-gray-300 rounded-md focus:outline-none"
+                                autoFocus
+                            />
+                        )}
                     </div>
 
                     {/* Right Section */}
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-4 ml-auto">
                         <FiShoppingBag size={20} />
                         <FiUser size={20} />
-                        <FiSearch size={20} />
+                        {!isSearchActive ? (
+                            <FiSearch size={20} className="cursor-pointer" onClick={handleSearchClick} />
+                        ) : (
+                            <button onClick={handleCloseSearch} className="text-sm font-semibold cursor-pointer">
+                                Close
+                            </button>
+                        )}
                         <button className="flex items-center space-x-1">
                             <FiMenu size={20} />
                             <span className="text-sm font-semibold">MENU</span>

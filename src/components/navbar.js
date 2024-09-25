@@ -12,20 +12,21 @@ const Navbar = () => {
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 100) {
+
                 setIsScrolled(true);
             } else {
                 setIsScrolled(false);
             }
         };
-
         window.addEventListener('scroll', handleScroll);
-
         return () => {
-            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('scroll',   
+ handleScroll);
         };
     }, []);
 
-    const handleSearchClick = () => {
+    const   
+ handleSearchClick = () => {
         setIsSearchActive(true);
     };
 
@@ -44,7 +45,11 @@ const Navbar = () => {
                 style={{ backgroundImage: "url('/images/background.png')" }}
             >
                 <div className="absolute inset-0 bg-black opacity-65" />
-                <h1 className={`text-6xl font-cormorant sm:text-10xl mt-48 ml-2 md:text-10xl lg:text-11xl lg:tracking-40px sm:tracking-wider tracking-widest text-white font-bold transition-all duration-700 ease-in-out${isScrolled ? 'opacity-0 translate-y-[-100%] scale-50 text-black' : 'opacity-100 translate-y-0 scale-100'}`}>
+                <h1
+                    className={`text-6xl font-cormorant sm:text-10xl mt-48 ml-2 md:text-10xl lg:text-11xl lg:tracking-40px sm:tracking-wider tracking-widest text-white font-bold transition-all duration-700 ease-in-out${
+                        isScrolled ? 'opacity-0 translate-y-[-100%] scale-50 text-black' : 'opacity-100 translate-y-0 scale-100'
+                    } || ${isSearchActive ? 'opacity-0' : 'opacity-100'}`}
+                >
                     MINACIA
                 </h1>
             </div>
@@ -53,14 +58,18 @@ const Navbar = () => {
             <div className="fixed top-0 w-full bg-white z-30 py-6 shadow-md transition-all duration-700 ease-in-out">
                 <div className="relative flex items-center w-4/5 mx-auto">
                     {/* Left Section */}
-                    <div className={`flex items-center space-x-2 transition-all duration-500 ${isSearchActive ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                    <div
+                        className={`flex items-center space-x-2 ${isSearchActive ? 'opacity-0' : 'opacity-100'}`}
+                    >
                         <button className="flex items-center text-sm font-semibold">
                             <span className="mr-1">+</span> Contact Us
                         </button>
                     </div>
-
                     {/* Center Section or Search Bar */}
-                    <div className={`absolute transition-all duration-700 ease-in-out ${isSearchActive ? 'left-0 opacity-100' : 'left-1/2 transform -translate-x-1/2 opacity-100'} right-0 text-center`}>
+                    <div
+                        className={`absolute ${isSearchActive ? 'left-0 opacity-100' : 'left-1/2 transform -translate-x-1/2 opacity-100'} right-0 text-center`}
+                    >
+
                         {!isSearchActive ? (
                             <div className={`text-4xl font-cormorant font-bold transition-all duration-700 ease-in-out ${isScrolled ? 'opacity-100 transform translate-y-0 scale-100' : 'opacity-0 transform translate-y-10 scale-75'}`}>
                                 MINACIA
@@ -82,7 +91,6 @@ const Navbar = () => {
                             </div>
                         )}
                     </div>
-
                     {/* Right Section */}
                     <div className="flex items-center space-x-4 ml-auto transition-all duration-700 ease-in-out">
                         {!isSearchActive ? (
@@ -99,6 +107,7 @@ const Navbar = () => {
                     </div>
                 </div>
             </div>
+
 
             {/* Menu Drawer */}
             <MenuDrawer isMenuOpen={isMenuOpen} handleMenuToggle={handleMenuToggle} />

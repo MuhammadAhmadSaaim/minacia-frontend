@@ -103,7 +103,7 @@ function Footer() {
                         id="to-top-button"
                         onClick={goToTop}
                         title="Go To Top"
-                        className={`fixed z-50 bottom-10 right-10 p-4 border-0 w-14 h-14 rounded-full shadow-md group bg-gradient-to-br from-zinc-500 to-black ${showButton ? 'visible' : 'invisible'} hover:bg-gradient-to-br hover:from-purple-400 hover:to-pink-400 text-white text-lg font-semibold transition-colors duration-300`}
+                        className={`fixed  bottom-10 right-10 p-4 border-0 w-14 h-14 rounded-full shadow-md group bg-gradient-to-br from-zinc-500 to-black ${showButton ? 'visible' : 'invisible'} hover:bg-gradient-to-br hover:from-purple-400 hover:to-pink-400 text-white text-lg font-semibold transition-colors duration-300`}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                             <path d="M12 4l8 8h-6v8h-4v-8H4l8-8z" />

@@ -7,6 +7,13 @@ module.exports = {
       fontFamily: {
         cormorant: ['"Cormorant Garamond"', 'serif'],
       },
+      fontSize: {
+        '10xl': '9rem',
+        '11xl': '10rem',
+      },
+      letterSpacing: {
+        '40px': '40px', 
+      },
     },
   },
   plugins: [],

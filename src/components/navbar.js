@@ -20,15 +20,15 @@ const Navbar = () => {
         };
         window.addEventListener('scroll', handleScroll);
         return () => {
-            window.removeEventListener('scroll',   
- handleScroll);
+            window.removeEventListener('scroll',
+                handleScroll);
         };
     }, []);
 
-    const   
- handleSearchClick = () => {
-        setIsSearchActive(true);
-    };
+    const
+        handleSearchClick = () => {
+            setIsSearchActive(true);
+        };
 
     const handleCloseSearch = () => {
         setIsSearchActive(false);
@@ -46,9 +46,8 @@ const Navbar = () => {
             >
                 <div className="absolute inset-0 bg-black opacity-65" />
                 <h1
-                    className={`text-6xl font-cormorant sm:text-10xl mt-48 ml-2 md:text-10xl lg:text-11xl lg:tracking-40px sm:tracking-wider tracking-widest text-white font-bold transition-all duration-700 ease-in-out${
-                        isScrolled ? 'opacity-0 translate-y-[-100%] scale-50 text-black' : 'opacity-100 translate-y-0 scale-100'
-                    } || ${isSearchActive ? 'opacity-0' : 'opacity-100'}`}
+                    className={`text-6xl font-cormorant sm:text-10xl mt-48 ml-2 md:text-10xl lg:text-11xl lg:tracking-40px sm:tracking-wider tracking-widest text-white font-bold transition-all duration-700 ease-in-out${isScrolled ? 'opacity-0 translate-y-[-100%] scale-50 text-black' : 'opacity-100 translate-y-0 scale-100'
+                        } || ${isSearchActive ? 'opacity-0' : 'opacity-100'}`}
                 >
                     MINACIA
                 </h1>

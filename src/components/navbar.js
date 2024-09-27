@@ -70,9 +70,9 @@ const Navbar = () => {
                     <div
                         className={`flex items-center space-x-2 ${isSearchActive ? 'opacity-0' : 'opacity-100'}`}
                     >
-                        <button className="flex items-center text-sm font-semibold">
+                        <a href="/contact-us" className="flex items-center text-sm font-semibold">
                             <span className="mr-1">+</span> Contact Us
-                        </button>
+                        </a>
                     </div>
                     {/* Center Section or Search Bar */}
                     <div

@@ -23,7 +23,7 @@ const MenuDrawer = ({ isMenuOpen, handleMenuToggle }) => {
                     <hr className="my-4" />
                     <li className="list-none"><a href="/all-products" className="text-lg font-semibold">All Products</a></li>
                     <hr className="my-4" />
-                    <li className="list-none"><a href="#" className="text-lg font-semibold">Contact Us</a></li>
+                    <li className="list-none"><a href="/contact-us" className="text-lg font-semibold">Contact Us</a></li>
                 </nav>
             </div>
         </div>

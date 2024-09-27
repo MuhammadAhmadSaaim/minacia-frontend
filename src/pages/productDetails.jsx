@@ -64,7 +64,7 @@ const ProductDetails = () => {
                                 <button
                                     key={color.name}
                                     onClick={() => setSelectedColor(color.name)}
-                                    className={`px-4 py-2 border rounded-md text-base lg:text-lg font-cormorant ${selectedColor === color.name ? 'bg-black text-white' : 'border-gray-400 text-gray-600'
+                                    className={`px-4 py-2 border text-base lg:text-lg font-cormorant ${selectedColor === color.name ? 'bg-black text-white' : 'border-gray-400 text-gray-600'
                                         }`}
                                 >
                                     {color.name}
@@ -83,7 +83,7 @@ const ProductDetails = () => {
                     <p className="text-xl lg:text-3xl font-semibold mb-6 font-cormorant">$14,900*</p>
 
                     {/* Contact Button */}
-                    <button className="w-full lg:w-auto text-2xl bg-black text-white py-3 px-6 rounded-md mb-6 font-cormorant">
+                    <button className="w-full lg:w-auto text-2xl bg-black text-white py-3 px-6 -md mb-6 font-cormorant">
                         Add To Cart
                     </button>
 

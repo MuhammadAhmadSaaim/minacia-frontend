@@ -12,7 +12,7 @@ const ServiceSection = () => {
     }, []);
 
     return (
-        <div className="text-center py-32 flex flex-col justify-center">
+        <div className="text-center my-32 flex flex-col justify-center">
             <h2 className="text-3xl font-cormorant mb-8 font-bold">Minacia Services</h2>
             <div className="w-4/5 mx-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-4 justify-center">
                 <div data-aos="fade-up" data-aos-delay="100" className="flex justify-center">

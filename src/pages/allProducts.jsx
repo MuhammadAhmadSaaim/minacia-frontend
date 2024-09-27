@@ -253,7 +253,7 @@ const AllProducts = () => {
       </div>
 
       {/* Products Section */}
-      <div className="flex-wrap mx-auto mt-8 mb-32 flex justify-around px-10">
+      <div className="flex-wrap mx-auto mt-8 mb-8 flex justify-around px-10">
         {currentProducts.length > 0 ? (
 
           productsArray.map((product) => (

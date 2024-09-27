@@ -5,7 +5,7 @@ const ListingCard = ({ name, price, image, imageHover, category }) => {
 
   return (
     <div
-      className="relative bg-white overflow-hidden group mt-12 flex flex-col w-full max-w-xs mx-2"
+      className="relative bg-white overflow-hidden group flex flex-col w-full max-w-xs mx-2 mb-4"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

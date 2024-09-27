@@ -1,63 +1,126 @@
 import React, { useState } from "react";
+import ListingCard from "../components/listingCard";
 
 const AllProducts = () => {
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
-  const [selectedSubcategory, setSelectedSubcategory] = useState("");
   const [priceRange, setPriceRange] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [openCategories, setOpenCategories] = useState(false);
   const productsPerPage = 12;
 
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-    setSelectedSubcategory(""); // Reset selected subcategory when category changes
-    setCurrentPage(1);
-    setCategoryOpen(false);
-  };
+  // Dummy categories
+  const categories = ["Category 1", "Category 2", "Category 3"];
 
-  const handleSubcategoryClick = (subcategory) => {
-    setSelectedSubcategory(subcategory);
-    setCurrentPage(1);
-    setCategoryOpen(false);
-  };
-
-  const categories = {
-    "Category 1": ["Subcategory 1.1", "Subcategory 1.2"],
-    "Category 2": ["Subcategory 2.1", "Subcategory 2.2"],
-    "Category 3": ["Subcategory 3.1", "Subcategory 3.2"],
-  };
-
-  // Define an array of 16 dummy products
   const productsArray = [
     {
       id: 1,
-      name: 'Cool T-Shirt',
-      price: '$25',
+      name: "Cool T-Shirt",
+      price: "$25",
       category: "Category 1",
-      image: '/images/background.png',
-      imageHover: '/images/1.avif',
+      image: "/images/background.png",
+      imageHover: "/images/1.avif",
     },
     {
       id: 2,
       name: "Product 2",
       price: "$30",
       category: "Category 2",
-      image: '/images/background.png',
-      imageHover: '/images/1.avif',
+      image: "/images/background.png",
+      imageHover: "/images/1.avif",
+    },
+    {
+      id: 3,
+      name: "Product 3",
+      price: "$35",
+      category: "Category 3",
+      image: "/images/background.png",
+      imageHover: "/images/1.avif",
+    },
+    {
+      id: 4,
+      name: "Product 4",
+      price: "$40",
+      category: "Category 1",
+      image: "/images/background.png",
+      imageHover: "/images/1.avif",
+    },
+    {
+      id: 5,
+      name: "Product 5",
+      price: "$45",
+      category: "Category 2",
+      image: "/images/background.png",
+      imageHover: "/images/1.avif",
+    },
+    {
+      id: 6,
+      name: "Product 6",
+      price: "$50",
+      category: "Category 3",
+      image: "/images/background.png",
+      imageHover: "/images/1.avif",
+    },
+    {
+      id: 7,
+      name: "Product 7",
+      price: "$55",
+      category: "Category 1",
+      image: "/images/background.png",
+      imageHover: "/images/1.avif",
+    },
+    {
+      id: 8,
+      name: "Product 8",
+      price: "$60",
+      category: "Category 2",
+      image: "/images/background.png",
+      imageHover: "/images/1.avif",
+    },
+    {
+      id: 9,
+      name: "Product 9",
+      price: "$65",
+      category: "Category 3",
+      image: "/images/background.png",
+      imageHover: "/images/1.avif",
+    },
+    {
+      id: 10,
+      name: "Product 10",
+      price: "$70",
+      category: "Category 1",
+      image: "/images/background.png",
+      imageHover: "/images/1.avif",
+    },
+    {
+      id: 11,
+      name: "Product 11",
+      price: "$75",
+      category: "Category 2",
+      image: "/images/background.png",
+      imageHover: "/images/1.avif",
+    },
+    {
+      id: 12,
+      name: "Product 12",
+      price: "$80",
+      category: "Category 3",
+      image: "/images/background.png",
+      imageHover: "/images/1.avif",
     },
   ];
 
   const filteredProducts = productsArray.filter((product) => {
-    const matchesCategory =
+    return (
       selectedCategory === "All Categories" ||
-      product.category === selectedCategory;
-    const matchesSubcategory =
-      !selectedSubcategory || product.subcategory === selectedSubcategory;
-    return matchesCategory && matchesSubcategory;
+      product.category === selectedCategory
+    );
   });
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+
   const currentProducts = filteredProducts.slice(
     indexOfFirstProduct,
     indexOfLastProduct
@@ -81,20 +144,19 @@ const AllProducts = () => {
     setCurrentPage(pageNumber);
   };
 
-  // State to manage which category's subcategories are open
-  const [openSubcategories, setOpenSubcategories] = useState({});
+  const toggleCategoryDropdown = () => {
+    setOpenCategories(!openCategories);
+  };
 
-  const toggleSubcategoryDropdown = (category) => {
-    setOpenSubcategories((prev) => ({
-      ...prev,
-      [category]: !prev[category], // Toggle the selected category
-    }));
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+    setCurrentPage(1); // Reset pagination to page 1 after selecting a category
   };
 
   return (
     <div>
       {/* Image with Title */}
-      <div className="relative h-64 mb-6">
+      <div className="relative h-80 mb-6">
         <img
           src="/images/bgtemp.jpg"
           alt="All Products"
@@ -105,8 +167,8 @@ const AllProducts = () => {
         </h1>
       </div>
 
-      {/* Sticky Nav and Filter Bar */}
-      <div className="sticky top-16 bg-white z-10 w-full flex justify-end items-center px-4 py-2">
+      {/* Fixed Filter and Sort Bar */}
+      <div className="top-16 bg-white z-10 w-full flex justify-end items-center px-4 py-1">
         {/* Filter Section */}
         <div className="relative w-full sm:w-auto mr-4">
           <button
@@ -131,6 +193,7 @@ const AllProducts = () => {
           </button>
           {categoryOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white shadow-md rounded-md z-10">
+              {/* Price Range Filter */}
               <div className="px-4 py-2 border-b">
                 <label className="text-gray-700 text-sm font-cormorant">
                   Price Range
@@ -144,49 +207,40 @@ const AllProducts = () => {
                 />
               </div>
 
+              {/* Categories Dropdown */}
               <div className="px-4 py-2">
-                <label className="text-gray-700 text-sm font-cormorant mb-1">
-                  Categories
-                </label>
-                <ul>
-                  {Object.keys(categories).map((category) => (
-                    <li key={category}>
-                      <div className="flex items-center justify-between cursor-pointer font-cormorant">
-                        <span onClick={() => handleCategoryClick(category)}>
-                          {category}
-                        </span>
-                        <button
-                          onClick={() => toggleSubcategoryDropdown(category)}
-                          className="text-gray-500 focus:outline-none"
-                        >
-                          {openSubcategories[category] ? "−" : "+"}
-                        </button>
-                      </div>
-                      {openSubcategories[category] && (
-                        <ul className="pl-4">
-                          {categories[category].map((subcategory) => (
-                            <li
-                              key={subcategory}
-                              className="font-cormorant cursor-pointer"
-                              onClick={() =>
-                                handleSubcategoryClick(subcategory)
-                              }
-                            >
-                              {subcategory}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </li>
-                  ))}
-                </ul>
+                <div className="flex items-center justify-between cursor-pointer text-gray-700 text-sm font-cormorant mb-1">
+                  <span onClick={() => toggleCategoryDropdown()}>
+                    Categories
+                  </span>
+                  <button
+                    onClick={() => toggleCategoryDropdown()}
+                    className="text-gray-500 focus:outline-none"
+                  >
+                    {openCategories ? "−" : "+"}
+                  </button>
+                </div>
+
+                {openCategories && (
+                  <ul className="pl-4 mt-2">
+                    {categories.map((category) => (
+                      <li
+                        key={category}
+                        className="font-cormorant cursor-pointer"
+                        onClick={() => handleCategoryClick(category)}
+                      >
+                        {category}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
           )}
         </div>
 
         {/* Sort By */}
-        <div className="w-full sm:w-auto">
+        <div className="relative w-full sm:w-auto mb-1">
           <label className="text-black uppercase font-cormorant text-sm mr-2">
             Sort by:
           </label>
@@ -199,23 +253,20 @@ const AllProducts = () => {
       </div>
 
       {/* Products Section */}
-      <div className="flex flex-wrap justify-start px-4">
+      <div className="flex-wrap mx-auto mt-8 mb-32 flex justify-around px-10">
         {currentProducts.length > 0 ? (
-          currentProducts.map((product) => (
-            <div
+
+          productsArray.map((product) => (
+            <ListingCard
               key={product.id}
-              className="border border-gray-200 rounded-lg p-4 mb-6 w-full sm:w-1/2 md:w-1/3 lg:w-1/4" // Responsive widths
-            >
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-48 object-cover mb-4"
-              />
-              <h2 className="text-gray-900 font-cormorant">{product.name}</h2>
-              <p className="text-gray-600 font-cormorant">{product.price}</p>
-              <p className="text-gray-500 font-cormorant">{product.category}</p>
-            </div>
+              name={product.name}
+              price={product.price}
+              image={product.image}
+              imageHover={product.imageHover}
+              category={product.category}
+            />
           ))
+
         ) : (
           <div className="w-full text-center text-gray-500">
             No products found.

@@ -30,6 +30,9 @@ const ProductDetails = () => {
 
     return (
         <div>
+            <div className="h-20" />
+
+            {/* Product Details Section */}
             <div className="flex flex-col lg:flex-row p-4 lg:p-12 justify-center">
                 {/* Image Section */}
                 <div className="w-full lg:w-1/2 flex justify-center lg:justify-start">

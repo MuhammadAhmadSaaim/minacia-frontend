@@ -2,12 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { FiShoppingBag, FiUser, FiSearch, FiMenu } from 'react-icons/fi';
 import { IoCloseOutline } from 'react-icons/io5';
 import MenuDrawer from './menuDrawer';
+import { useLocation } from 'react-router-dom';
 
 
 const Navbar = () => {
     const [isSearchActive, setIsSearchActive] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+
+    // Get the current location (URL)
+    const location = useLocation();
+
+    // Check if the user is on the home page
+    const isHomePage = location.pathname === '/'; // Assuming home page is at "/"
 
     useEffect(() => {
         const handleScroll = () => {
@@ -38,20 +45,23 @@ const Navbar = () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
+
     return (
         <div className="relative z-30">
             {/* Background Section */}
-            <div className="relative h-screen flex justify-center bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: "url('/images/background.png')" }}
-            >
-                <div className="absolute inset-0 bg-black opacity-65" />
-                <h1
-                    className={`text-6xl font-cormorant sm:text-10xl mt-48 ml-2 md:text-10xl lg:text-11xl lg:tracking-40px sm:tracking-wider tracking-widest text-white font-bold transition-all duration-700 ease-in-out${isScrolled ? 'opacity-0 translate-y-[-100%] scale-50 text-black' : 'opacity-100 translate-y-0 scale-100'
-                        } || ${isSearchActive ? 'opacity-0' : 'opacity-100'}`}
+            {isHomePage && (
+                <div className="relative h-screen flex justify-center bg-cover bg-center bg-no-repeat"
+                    style={{ backgroundImage: "url('/images/background.png')" }}
                 >
-                    MINACIA
-                </h1>
-            </div>
+                    <div className="absolute inset-0 bg-black opacity-65" />
+                    <h1
+                        className={`text-6xl font-cormorant sm:text-10xl mt-48 ml-2 md:text-10xl lg:text-11xl lg:tracking-40px sm:tracking-wider tracking-widest text-white font-bold transition-all duration-700 ease-in-out${isScrolled ? 'opacity-0 translate-y-[-100%] scale-50 text-black' : 'opacity-100 translate-y-0 scale-100'
+                            } || ${isSearchActive ? 'opacity-0' : 'opacity-100'}`}
+                    >
+                        MINACIA
+                    </h1>
+                </div>
+            )}
 
             {/* Navbar */}
             <div className="fixed top-0 w-full bg-white z-30 py-6 shadow-md transition-all duration-700 ease-in-out">
@@ -70,9 +80,12 @@ const Navbar = () => {
                     >
 
                         {!isSearchActive ? (
-                            <div className={`text-4xl font-cormorant font-bold transition-all duration-700 ease-in-out ${isScrolled ? 'opacity-100 transform translate-y-0 scale-100' : 'opacity-0 transform translate-y-10 scale-75'}`}>
-                                MINACIA
-                            </div>
+                            <a href="/">
+                                <div className={`text-4xl font-cormorant font-bold transition-all duration-700 ease-in-out ${isHomePage ? (isScrolled ? 'opacity-100 transform translate-y-0 scale-100' : 'opacity-0 transform translate-y-10 scale-75') : ''}`}>
+                                    MINACIA
+                                </div>
+                            </a>
+
                         ) : (
                             <div className="flex items-center justify-between w-full">
                                 <div className="text-4xl font-cormorant font-bold">MINACIA</div>
@@ -99,7 +112,7 @@ const Navbar = () => {
                                 <FiSearch size={20} className="cursor-pointer transition-all duration-500" onClick={handleSearchClick} />
                                 <button className="flex items-center space-x-1" onClick={handleMenuToggle}>
                                     <FiMenu size={20} />
-                                    <span className="text-sm font-semibold">MENU</span>
+                                    <span className="text-md font-semibold font-cormorant">MENU</span>
                                 </button>
                             </div>
                         ) : null}

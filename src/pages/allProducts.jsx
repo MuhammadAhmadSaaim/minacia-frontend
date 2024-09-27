@@ -451,11 +451,10 @@ const AllProducts = () => {
       {/* Pagination Controls */}
       <div className="flex justify-center mt-8 space-x-2">
         <button
-          className={`px-4 py-2 uppercase font-cormorant ${
-            currentPage === 1
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:underline"
-          }`}
+          className={`px-4 py-2 uppercase font-cormorant ${currentPage === 1
+            ? "opacity-50 cursor-not-allowed"
+            : "hover:underline"
+            }`}
           onClick={handlePreviousPage}
           disabled={currentPage === 1}
         >
@@ -464,23 +463,20 @@ const AllProducts = () => {
         {[...Array(totalPages)].map((_, index) => (
           <button
             key={index}
-            className={`px-4 py-2 uppercase font-cormorant text-lg ${
-              currentPage === index + 1
-                ? "text-black underline"
-                : "text-gray-600 hover:underline"
-            }`}
+            className={`px-4 py-2 uppercase font-cormorant text-lg ${currentPage === index + 1
+              ? "text-black underline"
+              : "text-gray-600 hover:underline"
+              }`}
             onClick={() => handlePageClick(index + 1)}
           >
             {index + 1}
           </button>
         ))}
-        -
         <button
-          className={`px-4 py-2 uppercase font-cormorant ${
-            currentPage === totalPages
-              ? "opacity-50 cursor-not-allowed"
-              : "hover:underline"
-          }`}
+          className={`px-4 py-2 uppercase font-cormorant ${currentPage === totalPages
+            ? "opacity-50 cursor-not-allowed"
+            : "hover:underline"
+            }`}
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
         >

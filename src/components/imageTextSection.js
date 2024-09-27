@@ -6,8 +6,8 @@ const ImageTextSection = () => {
             <div className="text-center mb-10">
                 <h2 className="text-3xl font-bold font-cormorant">Featured</h2>
             </div>
-            <div className="flex items-center max-w-full mx-auto p-5">
-                <div className="flex-1">
+            <div className="flex flex-col md:flex-row items-center max-w-full mx-auto p-5">
+                <div className="flex-1 mb-4 md:mb-0">
                     <img
                         src="/images/background.png"
                         alt="Description"

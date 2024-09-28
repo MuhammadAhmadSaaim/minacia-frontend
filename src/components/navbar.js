@@ -107,8 +107,8 @@ const Navbar = () => {
                     <div className="flex items-center space-x-4 ml-auto transition-all duration-700 ease-in-out">
                         {!isSearchActive ? (
                             <div className="flex items-center space-x-4">
-                                <FiShoppingBag size={20} />
-                                <FiUser size={20} />
+                                <a href='/cart'><FiShoppingBag size={20} /></a>
+                                <a href='/login'><FiUser size={20} /></a>
                                 <FiSearch size={20} className="cursor-pointer transition-all duration-500" onClick={handleSearchClick} />
                                 <button className="flex items-center space-x-1" onClick={handleMenuToggle}>
                                     <FiMenu size={20} />

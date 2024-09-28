@@ -64,7 +64,7 @@ const ProductListing = () => {
 
     return (
         <div>
-            <ListingHeader title="Women" />
+            <ListingHeader title="Hats" />
             <div className="flex-wrap mx-auto mt-64 mb-32 flex justify-around px-10">
                 {productsArray.map((product) => (
                     <ListingCard

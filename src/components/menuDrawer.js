@@ -16,7 +16,7 @@ const MenuDrawer = ({ isMenuOpen, handleMenuToggle }) => {
                     <li className="list-none"><a href="#" className="text-lg font-semibold">Categories</a>
                         <ul className="ml-4 space-y-2">
                             <li className="mt-1"><a href="#" className="text-lg font-semibold">- Sun Glasses</a></li>
-                            <li><a href="#" className="text-lg font-semibold">- Hats</a></li>
+                            <li><a href="/product-listings" className="text-lg font-semibold">- Hats</a></li>
                             <li><a href="#" className="text-lg font-semibold">- Caps</a></li>
                         </ul>
                     </li>

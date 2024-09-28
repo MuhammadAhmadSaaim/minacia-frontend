@@ -6,6 +6,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Layout } from "./components/layout/layout";
 import AllProducts from "./pages/allProducts";
 import Contact from "./pages/contactUs";
+import Login from "./pages/loginSignUp";
+import PrivacyPolicy from "./pages/privacyPolicy";
+import FAQs from "./pages/faq";
 
 function App() {
   return (
@@ -18,6 +21,9 @@ function App() {
           <Route path="/product-listings" element={<ProductListing />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/contact-us" element={<Contact />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/Faqs" element={<FAQs/>}/>
+          <Route path="/privacypolicy" element={<PrivacyPolicy/>}/> 
         </Routes>
       </Layout>
     </Router>

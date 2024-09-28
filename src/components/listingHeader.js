@@ -25,11 +25,11 @@ const ListingHeader = (props) => {
           }}
         >
           <div className="absolute inset-0 bg-black opacity-65" />
-          <div className="absolute inset-0 ml-4 lg:ml-16 mt-6 lg:mt-14 z-10">
-            <span className="sm:text-white text-black text-7xl lg:text-8xl font-bold font-cormorant">
+          <div className="absolute inset-0 flex flex-col items-center mt-12 lg:mt-14 z-10">
+            <span className="sm:text-white text-black text-6xl lg:text-8xl font-bold font-cormorant">
               {props.title}
             </span>
-            <p className='text-white text-3xl ml-10 lg:ml-20'>Collection</p>
+            <p className='text-white text-3xl'>Collection</p>
           </div>
         </div>
         <div

@@ -10,7 +10,7 @@ const ProductListing = () => {
             price: '$25',
             category: "Category 1",
             image: '/images/background.png',
-            imageHover: '/images/1.avif',
+            imageHover: '/images/temp.jpeg',
         },
         {
             id: 2,

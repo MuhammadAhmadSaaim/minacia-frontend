@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+
 const ListingCard = ({ name, price, image, imageHover, category }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -23,12 +24,14 @@ const ListingCard = ({ name, price, image, imageHover, category }) => {
         <p className="text-gray-400 text-sm">{category}</p>
       </div>
 
-      <button
+      <a
+        href="/product-details"
         className={`absolute bottom-0 left-0 w-full bg-black text-white py-2 text-center transition-transform duration-500 ease-in-out ${isHovered ? 'translate-y-0' : 'translate-y-full'
           }`}
+
       >
         Add to Cart
-      </button>
+      </a>
     </div>
   );
 };

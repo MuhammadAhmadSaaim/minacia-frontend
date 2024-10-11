@@ -1,71 +1,76 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateQuantity, removeFromCart } from '../redux/cartSlice';
 
 const Cart = () => {
+    const cartItems = useSelector(state => state.cart.items);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const shipping = 10;
+
+    const handleRemove = (id) => {
+        dispatch(removeFromCart({ productId: id }));
+    };
+
+    const handleCheckout = () => {
+        navigate("/billing", { state: { price: totalPrice, totalItems: cartItems.length } });
+    };
+
+    const subtotal = cartItems.reduce((sum, item) => sum + parseFloat(item.price.replace('Rs', '')) * item.quantity, 0);
+    const taxes = subtotal * 0.17;
+    const totalPrice = subtotal + taxes + shipping;
+
     return (
-        <div className="cart-content m-auto">
-            <div className="md:hidden buttons-pay w-full border-b pt-6">
-                <div className="w-11/12 m-auto pb-6">
-                    <div className="text-center border-b py-8 text-2xl font-semibold">
-                        Shopping Bag
-                        <span className="count-elements mx-2">(1)</span>
-                    </div>
-
-                    <div className="w-4/5 mt-6 mb-4 m-auto">
-                        <button className="bg-black text-white mb-4 py-4 px-6 w-full tracking-widest text-xs font-semibold">
-                            CHECKOUT
-                        </button>
-                        <button className="bg-purple-400 text-white mb-4 py-4 px-6 w-full tracking-widest text-xs font-semibold">
-                            PAY WITH STRIPE
-                        </button>
-                        <button className="border py-4 px-6 w-full tracking-widest text-xs font-semibold">
-                            PayPal
-                        </button>
-                    </div>
-                </div>
-            </div>
-
+        <div className="cart-content mt-20">
             <div className="md:hidden shopping-bag w-full min-w-full">
                 <section className="usr-products">
                     <div className="products-wrapper w-full">
                         <ul className="product-list m-0 p-0 list-none">
-                            <li className="item-summary px-6 pb-12 border-b">
-                                <div className="item w-full mt-12 m-auto">
-                                    <div className="bg-black m-auto w-60 h-60">
-                                        image 
+                            {cartItems.map((item) => (
+                                <li key={item.id} className="item-summary px-6 pb-12 border-b">
+                                    <div className="item w-full mt-12 m-auto">
+                                        <div className="bg-black m-auto w-60 h-60">
+                                            <img src={item.images[1].image} alt={item.title} className="w-full h-full object-cover" /> {/* Adjust this line to your image structure */}
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div className="text-center my-4 item w-full tracking-wide">
-                                    <div className="font-semibold">
-                                        Leather Hang Bag 
+                                    <div className="text-center my-4 item w-full tracking-wide">
+                                        <div className="font-semibold">
+                                            {item.name}
+                                        </div>
+                                        <div className="font-light">
+                                            Color: {item.color}
+                                        </div>
+                                        <div className="font-light">
+                                            Size: {item.size}
+                                        </div>
+                                        <div className="my-4 text-xl tracking-wider">
+                                            Rs {item.price}
+                                        </div>
                                     </div>
-                                    <div className="font-light">
-                                        Color: Black 
+                                    <div className="qty flex">
+                                        <select
+                                            value={item.quantity}
+                                            onChange={(e) => {
+                                                const quantity = parseInt(e.target.value);
+                                                dispatch(updateQuantity({ productId: item.id, quantity }));
+                                            }}
+                                            className="border py-2 px-4 text-center"
+                                        >
+                                            {[...Array(10)].map((_, i) => (
+                                                <option key={i} value={i + 1}>QTY: {i + 1}</option>
+                                            ))}
+                                        </select>
                                     </div>
-                                    <div className="font-light">
-                                        Size: Large
+                                    <div className="py-4 mt-2 text-sm font-semibold item-footer flex space-x-4 justify-center">
+                                       
+                                        <button onClick={() => handleRemove(item.id)} className="border-b">
+                                            DELETE
+                                        </button>
                                     </div>
-                                    <div className="my-4 text-xl tracking-wider">
-                                        $1700 
-                                    </div>
-                                </div>
-                                <div className="qty flex">
-                                    <select className="border py-2 px-4 text-center">
-                                        <option>QTY</option>
-                                        {[...Array(10)].map((x, i) =>
-                                            <option>QTY: {i}</option>
-                                         )}
-                                    </select>
-                                </div>
-                                <div className="py-4 mt-2 text-sm font-semibold item-footer flex space-x-4 justify-center">
-                                    <button className="border-b">
-                                        EDIT
-                                    </button>
-                                    <button className="border-b">
-                                        DELETE
-                                    </button>
-                                </div>
-                            </li>
+                                </li>
+                            ))}
                         </ul>
                         <div className="order-summary w-full">
                             <div className="border-b osum-wrap p-8">
@@ -74,28 +79,28 @@ const Cart = () => {
                                         order summary
                                     </div>
                                     <div className="mb-4 text-xs uppercase">
-                                        UKCART40217258
+                                        {`Cart ID: ${Math.random().toString(36).substring(2, 15)}`} {/* Unique Cart ID for display */}
                                     </div>
                                 </div>
                                 <div className="order-details my-4">
                                     <div className="text-sm mb-4 font-semibold flex justify-between">
                                         <span>Subtotal</span>
-                                        <span>$1700</span>
+                                        <span>Rs {subtotal.toFixed(2)}</span>
                                     </div>
                                     <div className="text-sm mb-4 font-semibold flex justify-between">
                                         <span>Shipping</span>
-                                        <span className="text-gray-400">Free (Premium Express)</span>
+                                        <span className="text-gray-400">Rs {shipping}</span>
                                     </div>
                                     <div className="text-sm mb-4 font-semibold flex justify-between">
                                         <span>Estimated Tax</span>
-                                        <span><u>Calculate</u></span>
+                                        <span>Rs {taxes.toFixed(2)}</span>
                                     </div>
                                     <div className="text-sm pb-4 border-b font-semibold flex justify-between">
                                         <span>Estimated Total</span>
-                                        <span className="text-lg">$1700</span>
+                                        <span className="text-lg">Rs {totalPrice.toFixed(2)}</span>
                                     </div>
                                     <div className="w-4/5 mt-6 m-auto">
-                                        <button className="bg-black text-white py-4 px-6 w-full tracking-widest text-xs font-semibold">
+                                        <button onClick={handleCheckout} className="bg-black text-white py-4 px-6 w-full tracking-widest text-xs font-semibold">
                                             CHECKOUT
                                         </button>
                                     </div>
@@ -109,108 +114,102 @@ const Cart = () => {
             <div className="hidden md:block gutter w-full p-4">
                 <div className="wrapper p-8">
                     <div className="maincontent flex gap-8">
-                       <div className="left flex-1">
+                        <div className="left flex-1">
                             <div className="flex py-4 border-b uppercase justify-between w-full list-header">
                                 <div className="font-semibold">
                                     your selections
                                 </div>
                             </div>
                             <div className="mt-8 items">
-                                <div className="product w-full flex items-center border-b-2">
-                                    <div className="prodimg max-w-28">
-                                        <img
-                                            src="/images/temp.jpeg"
-                                            className="w-full"
-                                        />
-                                    </div>
-                                    <div className="flex flex-col p-4 flex-1">
-                                        <div className="prod-info flex items-center justify-between">
-                                            <div className="title text-md w-1/2">
-                                                Choker necklace with geometric Studs
-                                            </div>
-                                            <div className="flex-col text-end">
-                                                <div className="qty flex">
-                                                    <select className="border py-1 px-2 text-center">
-                                                        <option>QTY</option>
-                                                        {[...Array(10)].map((x, i) =>
-                                                            <option>QTY: {i}</option>
-                                                        )}
-                                                    </select>
+                                {cartItems.map((item) => (
+                                    <div key={item.id} className="product w-full flex items-center border-b-2">
+                                        <div className="prodimg max-w-28">
+                                            <img src={item.images[1].image} alt={item.title} className="w-full" />
+                                        </div>
+                                        <div className="flex flex-col p-4 flex-1">
+                                            <div className="prod-info flex items-center justify-between">
+                                                <div className="title text-md w-1/2">
+                                                    {item.name}
                                                 </div>
-                                                <div className="amount tracking-widest text-gray-600">
-                                                    $2950
+                                                <div className="flex-col text-end">
+                                                    <div className="qty flex">
+                                                        <select
+                                                            value={item.quantity}
+                                                            onChange={(e) => {
+                                                                const quantity = parseInt(e.target.value);
+                                                                dispatch(updateQuantity({ productId: item.id, quantity }));
+                                                            }}
+                                                            className="border py-1 px-2 text-center"
+                                                        >
+                                                            {[...Array(10)].map((_, i) => (
+                                                                <option key={i} value={i + 1}>QTY: {i + 1}</option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
+                                                    <div className="amount tracking-widest text-gray-600">
+                                                        Rs {item.price}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="r2 py-2 text-sm text-gray-600">
-                                            <div className="style">
-                                                Style# BQ79001460D8DD5
+                                            <div className="ship-info">
+                                                <div className="uppercase font-semibold">
+                                                    Available
+                                                </div>
+                                                <div className="text-sm">
+                                                    Enjoy your complementary delivery
+                                                </div>
                                             </div>
-                                            <div className="variation">
-                                                variation: Yellow-Gold toned Metal
+                                            <div className="py-4 mt-2 text-sm font-semibold item-footer space-x-4">
+                                                
+                                                <button onClick={() => handleRemove(item.id)} className="border-b">
+                                                    DELETE
+                                                </button>
                                             </div>
-                                        </div>
-                                        <div className="ship-info mt-8">
-                                            <div className="uppercase font-semibold">
-                                                Available
-                                            </div>
-                                            <div className="text-sm">
-                                                Enjoy your complementary delivery
-                                            </div>
-                                        </div>
-                                        <div className="py-4 mt-2 text-sm font-semibold item-footer space-x-4">
-                                            <button className="border-b">
-                                                EDIT
-                                            </button>
-                                            <button className="border-b">
-                                                DELETE
-                                            </button>
                                         </div>
                                     </div>
-                                </div>
+                                ))}
                             </div>
-                       </div>
-                       <div className="right flex-1 min-w-80 max-w-96">
+                        </div>
+                        <div className="right flex-1 min-w-80 max-w-96">
                             <div className="order-summary flex-col p-6 border">
                                 <div className="header pt-10 pb-6 border-b-2">
                                     <div className="font-semibold uppercase">
                                         order summary
                                     </div>
                                     <div className="text-sm uppercase">
-                                        USCART1235123
+                                        {`Cart ID: ${Math.random().toString(36).substring(2, 15)}`} {/* Unique Cart ID for display */}
                                     </div>
                                 </div>
                                 <div className="summary py-6 flex-col">
                                     <div className="text-sm mb-4 font-semibold flex justify-between">
                                         <span>Subtotal</span>
-                                        <span>$1700</span>
+                                        <span>Rs {subtotal.toFixed(2)}</span>
                                     </div>
                                     <div className="text-sm mb-4 font-semibold flex justify-between">
                                         <span>Shipping</span>
-                                        <span className="text-gray-400">Free </span>
+                                        <span className="text-gray-400">Rs {shipping}</span>
                                     </div>
                                     <div className="text-sm mb-4 font-semibold flex justify-between">
                                         <span>Estimated Tax</span>
-                                        <span><u>Calculate</u></span>
+                                        <span>Rs {taxes.toFixed(2)}</span>
                                     </div>
                                     <div className="text-sm pb-4 border-b font-semibold flex justify-between">
                                         <span>Estimated Total</span>
-                                        <span className="text-lg">$1700</span>
-                                    </div>
-                                    <div className="w-4/5 mt-6 m-auto">
-                                        <button className="bg-black text-white py-4 px-6 w-full tracking-widest text-xs font-semibold">
-                                            CHECKOUT
-                                        </button>
+                                        <span className="text-lg">Rs {totalPrice.toFixed(2)}</span>
                                     </div>
                                 </div>
-
+                                <div className="w-full mt-6">
+                                    <button onClick={handleCheckout} className="bg-black text-white py-4 px-6 w-full tracking-widest text-xs font-semibold">
+                                        CHECKOUT
+                                    </button>
+                                </div>
                             </div>
-                       </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Cart;

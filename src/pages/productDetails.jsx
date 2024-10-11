@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { addToCart } from '../redux/cartSlice';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 const ProductDetails = () => {
     const [selectedColor, setSelectedColor] = useState("Black");
-
-    const images = [
-        "/images/temp.jpeg",
-        "/images/temp.jpeg",
-        "/images/temp.jpeg", // Replace with different image paths if available
-    ];
-
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [quantity, setQuantity] = useState(1);
+    const { id } = useParams();
+    const products = useSelector(state => state.products.products);
+    const product = products.find(p => p.id === parseInt(id));
     const colors = [
         { name: 'Black', code: 'P78174 V70206 NZU95' },
         { name: 'Light Blue', code: 'P78174 V70206 NZU96' },
         { name: 'Gray', code: 'P78174 V70206 NZU97' },
     ];
-
     // Slider settings for slick-carousel
     const settings = {
         dots: true,
@@ -28,22 +29,27 @@ const ProductDetails = () => {
         arrows: true,
     };
 
+    const handleAddToCart = () => {
+        dispatch(addToCart({ product, quantity }));
+        navigate("/cart")
+      };
+
     return (
         <div>
             <div className="h-20" />
-
-            {/* Product Details Section */}
             <div className="flex flex-col lg:flex-row p-4 lg:p-12 justify-center">
                 {/* Image Section */}
                 <div className="w-full lg:w-1/2 flex justify-center lg:justify-start">
                     <Slider {...settings} className="w-full">
-                        {images.map((image, index) => (
-                            <div key={index} className="w-full flex justify-center items-center">
-                                <img
-                                    src={image}
-                                    alt={`Product Image ${index + 1}`}
-                                    className="w-full object-cover mx-auto"
-                                />
+                        {product.images.map((imageObj, index) => (
+                            <div key={index} className="flex justify-center items-center">
+                                <div className="h-[400px] w-full overflow-hidden flex justify-center items-center"> {/* Fixed height container */}
+                                    <img
+                                        src={imageObj.image}
+                                        alt={`Product Image ${index + 1}`}
+                                        className="h-full w-auto object-contain" 
+                                    />
+                                </div>
                             </div>
                         ))}
                     </Slider>
@@ -52,10 +58,10 @@ const ProductDetails = () => {
                 {/* Details Section */}
                 <div className="w-full lg:w-1/2 mt-6 lg:mt-0 flex flex-col justify-center lg:pl-12">
                     {/* Product Name */}
-                    <h1 className="text-3xl lg:text-5xl font-bold mb-4 font-cormorant">COAT</h1>
+                    <h1 className="text-3xl lg:text-5xl font-bold mb-4 font-cormorant">{product.name}</h1>
 
                     {/* Color Selection */}
-                    <p className="text-base lg:text-lg text-gray-600 mb-2 font-cormorant">Wool Tweed</p>
+                    <p className="text-base lg:text-lg text-gray-600 mb-2 font-cormorant">{product.description}</p>
 
                     <div className="mb-4">
                         <p className="text-base lg:text-lg text-gray-600 mb-2 font-cormorant">Available Colors:</p>
@@ -80,10 +86,10 @@ const ProductDetails = () => {
                     </p>
 
                     {/* Price */}
-                    <p className="text-xl lg:text-3xl font-semibold mb-6 font-cormorant">$14,900*</p>
+                    <p className="text-xl lg:text-3xl font-semibold mb-6 font-cormorant">${product.price}</p>
 
                     {/* Contact Button */}
-                    <button className="w-full lg:w-auto text-2xl bg-black text-white py-3 px-6 -md mb-6 font-cormorant">
+                    <button onClick={handleAddToCart} className="w-full lg:w-auto text-2xl bg-black text-white py-3 px-6 -md mb-6 font-cormorant">
                         Add To Cart
                     </button>
 

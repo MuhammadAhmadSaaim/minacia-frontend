@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 import { UserIcon, LockClosedIcon, EyeIcon, EyeSlashIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setToken, setId } from '../redux/jwtSlice';
+import axios from 'axios';
+
 
 const AuthForm = () => {
     const [isSignUp, setIsSignUp] = useState(false);
@@ -7,6 +12,47 @@ const AuthForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
+    
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:8000/api/auth/login/', {
+                username,
+                password,
+            });
+            dispatch(setToken(response.data));
+            dispatch(setId(response.data.id));
+            setSuccess('Login successfully');
+            setError(null);
+            navigate("/");
+        } catch (err) {
+            setError('Invalid Email or Password');
+            setSuccess(null);
+        }
+    };
+
+    const handleSubmitSignUP = async (event) => {
+        event.preventDefault();
+
+        try {
+            await axios.post('http://localhost:8000/api/auth/register/', {
+                username,
+                email,
+                password,
+            });
+            setSuccess('Registration successful!');
+            setUsername('');
+            setEmail('');
+            setPassword('');
+            navigate("/login");
+        } catch (err) {
+            setError('Registration failed. Please try again.');
+        }
+    };
 
     const toggleForm = () => {
         setIsSignUp(!isSignUp);
@@ -14,10 +60,12 @@ const AuthForm = () => {
 
     return (
         <div className="mt-16 h-screen w-full flex items-center justify-center font-cormorant">
+            {error && <p className="text-red-500 text-center">{error}</p>}
+            {success && <p className="text-green-500 text-center">{success}</p>}
             <div className="relative w-[900px] h-[450px] bg-white rounded-lg overflow-hidden">
                 {/* Sign In Form */}
                 <div className={`absolute top-0 left-0 w-1/2 h-full p-6 flex flex-col items-center justify-center transition-transform duration-700 ease-in-out ${isSignUp ? 'translate-x-full opacity-0' : 'translate-x-0 opacity-100'}`}>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <h1 className='text-6xl font-cormorant font-bold text-center'>Login</h1>
                         <div className="relative mt-4">
                             <UserIcon className="absolute inset-y-0 mt-10 left-3 flex items-center text-gray-500 h-5 w-5" />
@@ -65,7 +113,9 @@ const AuthForm = () => {
 
                 {/* Sign Up Form */}
                 <div className={`absolute top-0 left-0 w-1/2 h-full p-8 flex flex-col items-center justify-center transition-transform duration-700 ease-in-out ${isSignUp ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'}`}>
-                    <form>
+                    {error && <p className="text-red-500 text-center">{error}</p>}
+                    {success && <p className="text-green-500 text-center">{success}</p>}
+                    <form onSubmit={handleSubmitSignUP}>
                         <h1 className='text-6xl font-cormorant font-bold text-center'>SignUp</h1>
                         <div className="relative mt-4">
                             <UserIcon className="absolute inset-y-0 mt-10 left-3 flex items-center text-gray-500 h-5 w-5" />

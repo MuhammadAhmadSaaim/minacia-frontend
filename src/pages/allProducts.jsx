@@ -1,122 +1,86 @@
-import React, { useState } from "react";
+import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import { setProducts } from '../redux/productSlice';
 import ListingCard from "../components/listingCard";
 
 const AllProducts = () => {
+  const dispatch = useDispatch();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [priceRange, setPriceRange] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [openCategories, setOpenCategories] = useState(false);
+  const [sortOption, setSortOption] = useState("newest");
   const productsPerPage = 12;
 
   // Dummy categories
   const categories = ["Category 1", "Category 2", "Category 3"];
 
-  const productsArray = [
-    {
-      id: 1,
-      name: "Cool T-Shirt",
-      price: "$25",
-      category: "Category 1",
-      image: "/images/background.png",
-      imageHover: "/images/1.avif",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      price: "$30",
-      category: "Category 2",
-      image: "/images/background.png",
-      imageHover: "/images/1.avif",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      price: "$35",
-      category: "Category 3",
-      image: "/images/background.png",
-      imageHover: "/images/1.avif",
-    },
-    {
-      id: 4,
-      name: "Product 4",
-      price: "$40",
-      category: "Category 1",
-      image: "/images/background.png",
-      imageHover: "/images/1.avif",
-    },
-    {
-      id: 5,
-      name: "Product 5",
-      price: "$45",
-      category: "Category 2",
-      image: "/images/background.png",
-      imageHover: "/images/1.avif",
-    },
-    {
-      id: 6,
-      name: "Product 6",
-      price: "$50",
-      category: "Category 3",
-      image: "/images/background.png",
-      imageHover: "/images/1.avif",
-    },
-    {
-      id: 7,
-      name: "Product 7",
-      price: "$55",
-      category: "Category 1",
-      image: "/images/background.png",
-      imageHover: "/images/1.avif",
-    },
-    {
-      id: 8,
-      name: "Product 8",
-      price: "$60",
-      category: "Category 2",
-      image: "/images/background.png",
-      imageHover: "/images/1.avif",
-    },
-    {
-      id: 9,
-      name: "Product 9",
-      price: "$65",
-      category: "Category 3",
-      image: "/images/background.png",
-      imageHover: "/images/1.avif",
-    },
-    {
-      id: 10,
-      name: "Product 10",
-      price: "$70",
-      category: "Category 1",
-      image: "/images/background.png",
-      imageHover: "/images/1.avif",
-    },
-    {
-      id: 11,
-      name: "Product 11",
-      price: "$75",
-      category: "Category 2",
-      image: "/images/background.png",
-      imageHover: "/images/1.avif",
-    },
-    {
-      id: 12,
-      name: "Product 12",
-      price: "$80",
-      category: "Category 3",
-      image: "/images/background.png",
-      imageHover: "/images/1.avif",
-    },
-  ];
+  useEffect(() => {
+    fetch('http://localhost:8000/api/listing/productListing/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setData(data);
+        if (data) {
+          dispatch(setProducts(data));
+        }
+        setLoading(false);
+      })
+      .catch(error => {
+        setError(error);
+        setLoading(false);
+      });
+  }, [dispatch]);
 
-  const filteredProducts = productsArray.filter((product) => {
-    return (
-      selectedCategory === "All Categories" ||
-      product.category === selectedCategory
-    );
-  });
+  const applyFilters = (products) => {
+    let filteredProducts = products;
+
+    // Filter by category
+    if (selectedCategory !== "All Categories") {
+      filteredProducts = filteredProducts.filter((product) =>
+        product.category === selectedCategory
+      );
+    }
+
+    // Filter by price range
+    if (priceRange) {
+      const [minPrice, maxPrice] = priceRange.split("-").map(Number);
+      if (minPrice && maxPrice) {
+        filteredProducts = filteredProducts.filter(
+          (product) => product.price >= minPrice && product.price <= maxPrice
+        );
+      }
+    }
+
+    // Sort the products
+    let sortedProducts = [...filteredProducts]; // Create a shallow copy for sorting
+    if (sortOption === "priceLowHigh") {
+      sortedProducts.sort((a, b) => a.price - b.price);
+    } else if (sortOption === "priceHighLow") {
+      sortedProducts.sort((a, b) => b.price - a.price);
+    } else if (sortOption === "newest") {
+      sortedProducts.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
+    }
+
+    return sortedProducts; // Return the sorted products
+  };
+
+  const filteredProducts = applyFilters(data);
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -151,6 +115,11 @@ const AllProducts = () => {
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
     setCurrentPage(1); // Reset pagination to page 1 after selecting a category
+  };
+
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
+    setCurrentPage(1); // Reset pagination to page 1 after changing sort
   };
 
   return (
@@ -244,7 +213,11 @@ const AllProducts = () => {
           <label className="text-black uppercase font-cormorant text-sm mr-2">
             Sort by:
           </label>
-          <select className="text-black font-cormorant text-sm border-none focus:outline-none w-full sm:w-auto">
+          <select
+            value={sortOption}
+            onChange={handleSortChange}
+            className="text-black font-cormorant text-sm border-none focus:outline-none w-full sm:w-auto"
+          >
             <option value="newest">Newest</option>
             <option value="priceLowHigh">Price: Low to High</option>
             <option value="priceHighLow">Price: High to Low</option>
@@ -252,26 +225,27 @@ const AllProducts = () => {
         </div>
       </div>
 
-      {/* Products Section */}
-      <div className="flex-wrap mx-auto mt-8 mb-8 flex justify-around px-10">
-        {currentProducts.length > 0 ? (
+      <div className="flex-wrap mx-auto mt-40 mb-24 flex justify-around px-10">
+        {currentProducts.map((product, index) => {
+          const imageUrl = (product.images && product.images.length > 0)
+            ? product.images[0].image
+            : 'https://example.com/placeholder-image.jpg';
+          const imageHoverUrl = (product.images && product.images.length > 1)
+            ? product.images[1].image
+            : imageUrl;
 
-          productsArray.map((product) => (
+          return (
             <ListingCard
-              key={product.id}
+              key={index}
+              id={product.id}
               name={product.name}
               price={product.price}
-              image={product.image}
-              imageHover={product.imageHover}
-              category={product.category}
+              image={imageUrl}
+              imageHover={imageHoverUrl}
+              category={product.category_name}
             />
-          ))
-
-        ) : (
-          <div className="w-full text-center text-gray-500">
-            No products found.
-          </div>
-        )}
+          );
+        })}
       </div>
 
       {/* Pagination Controls */}
@@ -289,9 +263,9 @@ const AllProducts = () => {
         {[...Array(totalPages)].map((_, index) => (
           <button
             key={index}
-            className={`px-4 py-2 uppercase font-cormorant text-lg ${currentPage === index + 1
-              ? "text-black underline"
-              : "text-gray-600 hover:underline"
+            className={`px-4 py-2 uppercase font-cormorant ${currentPage === index + 1
+              ? "font-bold"
+              : "hover:underline"
               }`}
             onClick={() => handlePageClick(index + 1)}
           >
@@ -309,6 +283,11 @@ const AllProducts = () => {
           Next
         </button>
       </div>
+
+      {/* Error Handling */}
+      {error && <div className="text-red-500">{error.message}</div>}
+      {/* Loading Indicator */}
+      {loading && <div>Loading...</div>}
     </div>
   );
 };

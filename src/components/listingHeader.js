@@ -3,7 +3,7 @@ import React from 'react';
 const ListingHeader = (props) => {
   return (
     <div className="relative h-[75vh] sm:mt-14">
-      <div className="sm:block hidden w-full h-full flex justify-center">
+      <div className="sm:block hidden w-full h-full flex justify-center mt-32">
         <div
           className="w-[34%] h-full bg-cover bg-center"
           style={{
@@ -43,13 +43,12 @@ const ListingHeader = (props) => {
           }}
         />
       </div>
-      <div className='block sm:hidden relative bg-black h-full mt-1 bg-cover bg-center'
+      <div className='block sm:hidden relative bg-black h-full mt-28 bg-cover bg-center'
            style={{ backgroundImage: "url('/images/background.png')" }}
       >
         <div className="absolute inset-0 bg-black opacity-65" />
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <h1 className='text-white font-cormorant font-bold text-8xl'>{props.title}</h1>
-          <p className='text-white text-center m-2'>Women's ready-to-wear collection caters to the everyday wardrobe.</p>
         </div>
       </div>
     </div>

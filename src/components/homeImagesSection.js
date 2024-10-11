@@ -1,7 +1,8 @@
 import React from 'react';
 import BgImageCard from './bgImageCard';
-
+import { Navigate, useNavigate } from 'react-router-dom';
 const HomeImagesSection = () => {
+    const navigate = useNavigate();
     const cards = [
         {
             imageUrl: '/images/background.png',
@@ -36,7 +37,8 @@ const HomeImagesSection = () => {
                     <BgImageCard imageUrl={cards[2].imageUrl} title={cards[2].title} description={cards[2].description} />
                 </div>
             </div>
-            <button className="w-full lg:w-auto text-2xl bg-black text-white py-3 px-6 mt-8 mb-6 font-cormorant flex justify-center items-center mx-auto">
+        
+            <button onClick={() => {navigate("/all-products")}} className="w-full lg:w-auto text-2xl bg-black text-white py-3 px-6 mt-8 mb-6 font-cormorant flex justify-center items-center mx-auto">
                 Shop Now
             </button>
         </div>

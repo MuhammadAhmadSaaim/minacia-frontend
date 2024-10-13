@@ -1,10 +1,10 @@
+
 import React, { useState } from 'react';
 import { UserIcon, LockClosedIcon, EyeIcon, EyeSlashIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setToken, setId } from '../redux/jwtSlice';
 import axios from 'axios';
-
 
 const AuthForm = () => {
     const [isSignUp, setIsSignUp] = useState(false);
@@ -35,9 +35,8 @@ const AuthForm = () => {
         }
     };
 
-    const handleSubmitSignUP = async (event) => {
+    const handleSubmitSignUp = async (event) => {
         event.preventDefault();
-
         try {
             await axios.post('http://localhost:8000/api/auth/register/', {
                 username,
@@ -63,8 +62,8 @@ const AuthForm = () => {
             {error && <p className="text-red-500 text-center">{error}</p>}
             {success && <p className="text-green-500 text-center">{success}</p>}
             <div className="relative w-[900px] h-[450px] bg-white rounded-lg overflow-hidden">
-                {/* Sign In Form */}
-                <div className={`absolute top-0 left-0 w-1/2 h-full p-6 flex flex-col items-center justify-center transition-transform duration-700 ease-in-out ${isSignUp ? 'translate-x-full opacity-0' : 'translate-x-0 opacity-100'}`}>
+                {/* Left Panel for Login */}
+                <div className={`absolute top-0 left-0 w-1/2 h-full p-6 flex flex-col items-center justify-center transition-transform duration-700 ${isSignUp ? '-translate-x-full' : 'translate-x-0'} z-10`}>
                     <form onSubmit={handleSubmit}>
                         <h1 className='text-6xl font-cormorant font-bold text-center'>Login</h1>
                         <div className="relative mt-4">
@@ -111,11 +110,9 @@ const AuthForm = () => {
                     </form>
                 </div>
 
-                {/* Sign Up Form */}
-                <div className={`absolute top-0 left-0 w-1/2 h-full p-8 flex flex-col items-center justify-center transition-transform duration-700 ease-in-out ${isSignUp ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'}`}>
-                    {error && <p className="text-red-500 text-center">{error}</p>}
-                    {success && <p className="text-green-500 text-center">{success}</p>}
-                    <form onSubmit={handleSubmitSignUP}>
+                {/* Left Panel for SignUp */}
+                <div className={`absolute top-0 left-0 w-1/2 h-full p-8 flex flex-col items-center justify-center transition-transform duration-700 ${isSignUp ? 'translate-x-0' : '-translate-x-full'} z-10`}>
+                    <form onSubmit={handleSubmitSignUp}>
                         <h1 className='text-6xl font-cormorant font-bold text-center'>SignUp</h1>
                         <div className="relative mt-4">
                             <UserIcon className="absolute inset-y-0 mt-10 left-3 flex items-center text-gray-500 h-5 w-5" />
@@ -142,9 +139,6 @@ const AuthForm = () => {
                             />
                         </div>
                         <div className="mt-4 relative">
-                            <div className="flex justify-between">
-                                <label className="block text-gray-700 text-md font-bold mb-2">Password</label>
-                            </div>
                             <LockClosedIcon className="absolute inset-y-0 left-3 flex mt-10 items-center text-gray-500 h-5 w-5" />
                             <input
                                 className="text-gray-700 focus:outline-none focus:shadow-outline border border-purple-200 py-2 pl-10 block w-full appearance-none pr-10"
@@ -172,36 +166,20 @@ const AuthForm = () => {
                     </form>
                 </div>
 
-                {/* Overlay Panels */}
-                <div className="absolute w-full h-full">
-                    <div className={`absolute inset-0 w-1/2 h-full flex items-center justify-center text-white transition-transform duration-700 ease-in-out ${isSignUp ? 'translate-x-full' : 'hidden'}`}
-                        style={{ backgroundImage: "url('/images/background.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                        <div className="absolute inset-0 bg-black opacity-65" />
-                        <div className='relative z-10 flex flex-col items-center justify-center'>
-                            <h1 className="text-5xl text-center font-bold">Hello, Friend!</h1>
-                            <p className="mt-4 text-center text-2xl">Enter your personal details and start your journey with us</p>
-                            <button onClick={toggleForm} className="mt-8 p-3 border border-white text-white w-full max-w-xs text-xl rounded hover:bg-white hover:text-gray-800 transition-all">Sign In</button>
-                        </div>
-                    </div>
-
-                    <div className={`absolute inset-0 w-1/2 h-full flex items-center justify-center text-white transition-transform duration-700 ease-in-out ${isSignUp ? 'translate-x-full' : 'hidden'}`}
-                        style={{ backgroundImage: "url('/images/background.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                        <div className="absolute inset-0 bg-black opacity-65" />
-                        <div className='relative z-10 flex flex-col items-center justify-center'>
-                            <h1 className="text-5xl text-center font-bold">Welcome Back!</h1>
-                            <p className="mt-4 text-center text-2xl">To keep connected with us, please login with your personal info</p>
-                            <button onClick={toggleForm} className="mt-8 p-3 border border-white text-white w-full max-w-xs text-xl rounded hover:bg-white hover:text-gray-800 transition-all">Sign In</button>
-                        </div>
-                    </div>
-
-                    <div className={`absolute inset-0 bg-gradient-to-r from-gray-900 to-gray-800 w-1/2 h-full flex items-center justify-center text-white transition-transform duration-700 ease-in-out ${isSignUp ? 'hidden' : 'translate-x-full'}`}
-                        style={{ backgroundImage: "url('/images/background.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                        <div className="absolute inset-0 bg-black opacity-65" />
-                        <div className='relative z-10 flex flex-col items-center justify-center'>
-                            <h1 className="text-5xl text-center font-bold">Welcome Back!</h1>
-                            <p className="mt-4 text-center text-2xl">To keep connected with us, please login with your personal info</p>
-                            <button onClick={toggleForm} className="mt-8 p-3 border border-white text-white w-full max-w-xs text-xl rounded hover:bg-white hover:text-gray-800 transition-all">Sign Up</button>
-                        </div>
+                {/* Background Panel */}
+                <div className="absolute w-1/2 h-full right-0 top-0 flex items-center justify-center text-white z-0"
+                     style={{ backgroundImage: "url('/images/background.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                    <div className="absolute inset-0 bg-black opacity-65" />
+                    <div className='relative z-10 flex flex-col items-center justify-center'>
+                        <h1 className="text-5xl text-center font-bold">{isSignUp ? "Welcome Back!" : "Hello, Friend!"}</h1>
+                        <p className="mt-4 text-center text-2xl">
+                            {isSignUp 
+                                ? "To keep connected with us please login with your personal info"
+                                : "Enter your personal details and start your journey with us"}
+                        </p>
+                        <button onClick={toggleForm} className="mt-8 p-3 border border-white text-white w-full max-w-xs text-xl rounded hover:bg-white hover:text-gray-800 transition-all">
+                            {isSignUp ? "Sign In" : "Sign Up"}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -210,3 +188,4 @@ const AuthForm = () => {
 };
 
 export default AuthForm;
+

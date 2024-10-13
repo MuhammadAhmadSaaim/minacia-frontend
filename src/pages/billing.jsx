@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/navbar';
-import Footer from '../components/footer';
 import Payment from '../components/payment'; 
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -92,9 +90,8 @@ function Billing() {
 
     return (
         <div>
-            <script src="https://www.paypal.com/sdk/js?client-id=AY-NPFnM2JVT-m2ESlTT2UXbM7A5C3qy0bXwrtheGEwwFcRysCxUqCrr2UPcixllDvosLclpLkyV55FK&currency=USD"></script>
-            <Navbar isNotLanding="True" />
-            <div className="min-h-screen mt-20 md:mt-52">
+            <script src="https://www.paypal.com/sdk/js?client-id=AZPCdxk14CNhais6QslHvejE79DoqCfe7IUPFVt1g8Tw9k4UPCRv_CKPUDhg6CXeZpy2E0ZTn-ZVSuJw&currency=USD"></script>
+            <div className="min-h-screen mt-14 md:mt-36">
                 <div className="container px-6 py-12 mx-auto flex flex-col md:flex-row sm:flex-cols gap-4">
                     <div className="md:w-3/4">
                         <div className="bg-white rounded-lg shadow-md p-6 mb-4 h-full">
@@ -192,7 +189,6 @@ function Billing() {
                     </div>
                 </div>
             </div>
-            <Footer />
         </div>
     );
 }

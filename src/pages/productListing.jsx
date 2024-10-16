@@ -112,7 +112,7 @@ const ProductListing = () => {
                         onClick={() => handlePageClick(index + 1)}
                     >
                         {index + 1}
-                    </button>
+                    </button>   
                 ))}
                 <button
                     className={`px-4 py-2 uppercase font-cormorant ${currentPage === totalPages

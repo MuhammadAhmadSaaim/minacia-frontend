@@ -73,29 +73,29 @@ const Cart = () => {
                             ))}
                         </ul>
                         <div className="order-summary w-full">
-                            <div className="border-b osum-wrap p-8">
+                            <div className="border-b osum-wrap p-8 font-cormorant">
                                 <div className="order-header border-b">
-                                    <div className="mb-2 text-sm font-semibold uppercase">
+                                    <div className="mb-2 text-sm font-semibold uppercase font-cormorant">
                                         order summary
                                     </div>
                                     <div className="mb-4 text-xs uppercase">
                                         {`Cart ID: ${Math.random().toString(36).substring(2, 15)}`} {/* Unique Cart ID for display */}
                                     </div>
                                 </div>
-                                <div className="order-details my-4">
-                                    <div className="text-sm mb-4 font-semibold flex justify-between">
+                                <div className="order-details my-4 font-cormorant">
+                                    <div className="text-sm mb-4 font-semibold flex justify-between font-cormorant">
                                         <span>Subtotal</span>
                                         <span>Rs {subtotal.toFixed(2)}</span>
                                     </div>
-                                    <div className="text-sm mb-4 font-semibold flex justify-between">
+                                    <div className="text-sm mb-4 font-semibold flex justify-between font-cormorant">
                                         <span>Shipping</span>
                                         <span className="text-gray-400">Rs {shipping}</span>
                                     </div>
-                                    <div className="text-sm mb-4 font-semibold flex justify-between">
+                                    <div className="text-sm mb-4 font-semibold flex justify-between font-cormorant">
                                         <span>Estimated Tax</span>
                                         <span>Rs {taxes.toFixed(2)}</span>
                                     </div>
-                                    <div className="text-sm pb-4 border-b font-semibold flex justify-between">
+                                    <div className="text-sm pb-4 border-b font-semibold flex justify-between font-cormorant">
                                         <span>Estimated Total</span>
                                         <span className="text-lg">Rs {totalPrice.toFixed(2)}</span>
                                     </div>
@@ -178,22 +178,23 @@ const Cart = () => {
                                     </div>
                                     <div className="text-sm uppercase">
                                         {`Cart ID: ${Math.random().toString(36).substring(2, 15)}`} {/* Unique Cart ID for display */}
+
                                     </div>
                                 </div>
-                                <div className="summary py-6 flex-col">
-                                    <div className="text-sm mb-4 font-semibold flex justify-between">
+                                <div className="summary py-6 flex-col font-cormorant">
+                                    <div className="text-sm mb-4 font-semibold flex justify-between font-cormorant">
                                         <span>Subtotal</span>
                                         <span>Rs {subtotal.toFixed(2)}</span>
                                     </div>
-                                    <div className="text-sm mb-4 font-semibold flex justify-between">
+                                    <div className="text-sm mb-4 font-semibold flex justify-between font-cormorant">
                                         <span>Shipping</span>
                                         <span className="text-gray-400">Rs {shipping}</span>
                                     </div>
-                                    <div className="text-sm mb-4 font-semibold flex justify-between">
+                                    <div className="text-sm mb-4 font-semibold flex justify-between font-cormorant">
                                         <span>Estimated Tax</span>
                                         <span>Rs {taxes.toFixed(2)}</span>
                                     </div>
-                                    <div className="text-sm pb-4 border-b font-semibold flex justify-between">
+                                    <div className="text-sm pb-4 border-b font-semibold flex justify-between font-cormorant">
                                         <span>Estimated Total</span>
                                         <span className="text-lg">Rs {totalPrice.toFixed(2)}</span>
                                     </div>

@@ -5,17 +5,17 @@ const HomeImagesSection = () => {
     const navigate = useNavigate();
     const cards = [
         {
-            imageUrl: '/images/background.png',
+            imageUrl: '/images/7.jpg',
             title: 'Women',
             description: 'Explore Women\'s Collection',
         },
         {
-            imageUrl: '/images/background.png',
+            imageUrl: '/images/8.jpg',
             title: 'Women',
             description: 'Explore Women\'s Velvet Collection',
         },
         {
-            imageUrl: '/images/background.png',
+            imageUrl: '/images/6.jpg',
             title: 'Men',
             description: 'Fall Winter 2024 - Men\'s Collection',
         },

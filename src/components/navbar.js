@@ -15,7 +15,9 @@ const Navbar = () => {
 
     // Check if the user is on the home page
     const isHomePage = location.pathname === '/'; // Assuming home page is at "/"
+    const isLaunchPage = location.pathname === '/launch';
 
+    
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 100) {
@@ -44,6 +46,9 @@ const Navbar = () => {
     const handleMenuToggle = () => {
         setIsMenuOpen(!isMenuOpen);
     };
+
+    // Don't render Navbar on /launch
+    if (isLaunchPage) return null;
 
 
     return (

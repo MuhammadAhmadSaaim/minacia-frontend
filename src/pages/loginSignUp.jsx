@@ -171,11 +171,11 @@ const AuthForm = () => {
                      style={{ backgroundImage: "url('/images/background.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
                     <div className="absolute inset-0 bg-black opacity-65" />
                     <div className='relative z-10 flex flex-col items-center justify-center'>
-                        <h1 className="text-5xl text-center font-bold">{isSignUp ? "Welcome Back!" : "Hello, Friend!"}</h1>
+                        <h1 className="text-5xl text-center font-bold">{isSignUp ? "Welcome Back!" : "Halo, Minacia!"}</h1>
                         <p className="mt-4 text-center text-2xl">
                             {isSignUp 
-                                ? "To keep connected with us please login with your personal info"
-                                : "Enter your personal details and start your journey with us"}
+                                ? "To keep Connected SignUp to Minacia Society."
+                                : "Enter your personal details and start your journey with Minacia society."}
                         </p>
                         <button onClick={toggleForm} className="mt-8 p-3 border border-white text-white w-full max-w-xs text-xl rounded hover:bg-white hover:text-gray-800 transition-all">
                             {isSignUp ? "Sign In" : "Sign Up"}

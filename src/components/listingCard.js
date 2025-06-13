@@ -46,7 +46,7 @@ const ListingCard = ({ id, name, price, image, imageHover, category }) => {
 
       >
         Add to Cart
-      </a>
+      </button>
     </div>
   );
 };

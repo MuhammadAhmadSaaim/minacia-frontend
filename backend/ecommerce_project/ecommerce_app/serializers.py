@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Product, ProductImage, CartProduct, Cart
+from .models import Product, ProductImage, CartProduct, Cart, Subscriber
+
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -17,5 +18,7 @@ class ProductListingSerializer(serializers.ModelSerializer):
         fields = '__all__' 
 
 
-    
-        
+class SubscriberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscriber
+        fields = ['email']

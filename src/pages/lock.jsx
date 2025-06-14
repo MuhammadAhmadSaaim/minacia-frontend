@@ -1,25 +1,48 @@
 import React, { useState } from 'react';
 import { FaInstagram, FaLock } from 'react-icons/fa';
+import axios from 'axios'; // Make sure to install this: npm install axios
 
 const Lock = () => {
     const [password, setPassword] = useState('');
     const [showPasswordInput, setShowPasswordInput] = useState(false);
+    const [email, setEmail] = useState('');
+    const [message, setMessage] = useState('');
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-            e.preventDefault(); // prevent default form submission or refresh
+            e.preventDefault();
             if (!password.trim()) {
                 alert('Please enter your password');
             } else {
-                // Navigate to root
                 window.location.href = '/';
+            }
+        }
+    };
+
+    const handleSubscribe = async () => {
+        if (!email.trim()) {
+            setMessage('Please enter a valid email.');
+            return;
+        }
+
+        try {
+            const response = await axios.post('http://localhost:8000/api/listing/subscribe/', {
+                email: email,
+            });
+            setMessage('🎉 Subscribed successfully!');
+            setEmail('');
+        } catch (error) {
+            if (error.response?.data?.email?.[0]) {
+                setMessage(`⚠️ ${error.response.data.email[0]}`);
+            } else {
+                setMessage('❌ Subscription failed. Try again later.');
             }
         }
     };
 
     return (
         <div className="w-full min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-b from-white to-[#e5e5e5]">
-            {/* Logo at top center */}
+            {/* Logo */}
             <img
                 src="images/Final-06.png"
                 alt="Logo"
@@ -33,31 +56,43 @@ const Lock = () => {
                 className="absolute h-full max-h-screen w-auto object-contain z-0"
             />
 
-            {/* Optional overlay */}
+            {/* Overlay */}
             <div className="absolute inset-0 bg-white bg-opacity-40 backdrop-blur-sm z-0"></div>
 
-            {/* Content */}
-            <div className="relative z-10 text-center px-4 sm:px-8 max-w-ls w-full font-cormorant text-black">
+            {/* Main Content */}
+            <div className="relative z-10 text-center px-4 sm:px-8 max-w-lg w-full font-cormorant text-black">
                 <h1 className="text-3xl sm:text-4xl font-bold mb-2 uppercase">
-                   Rule Breakers Move First
+                    Rule Breakers Move First
                 </h1>
 
-                <p className="text-gray-200 mb-4">Prove you're one of us, enter your email to start notified.</p>
+                <p className="text-gray-700 mb-4">
+                    Prove you're one of us. Enter your email to stay notified.
+                </p>
 
-                {/* Email Field */}
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-4">
+                {/* Email Field + Button */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-2">
                     <input
                         type="email"
                         placeholder="Enter your email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         className="px-4 py-2 w-full sm:w-auto border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
                     />
-                    <button className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-900 transition">
+                    <button
+                        onClick={handleSubscribe}
+                        className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-900 transition"
+                    >
                         Request
                     </button>
                 </div>
 
+                {/* Success/Error Message */}
+                {message && (
+                    <p className="text-sm text-black mt-1 font-medium">{message}</p>
+                )}
+
                 {/* Password Entry */}
-                <div className="flex flex-col items-center justify-center gap-2 text-sm text-black cursor-pointer mb-6">
+                <div className="flex flex-col items-center justify-center gap-2 text-sm text-black cursor-pointer my-6">
                     {!showPasswordInput ? (
                         <div
                             className="flex items-center hover:underline"
@@ -79,7 +114,7 @@ const Lock = () => {
                     )}
                 </div>
 
-                {/* Instagram Link */}
+                {/* Instagram */}
                 <div className="flex items-center justify-center gap-2">
                     <FaInstagram className="text-black text-xl" />
                     <a

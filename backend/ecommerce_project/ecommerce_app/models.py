@@ -70,3 +70,10 @@ class OrderProduct(models.Model):
 
     def __str__(self):
         return f"{self.quantity} of {self.product.name} in Order {self.order.order_no}"
+
+class Subscriber(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email

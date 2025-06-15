@@ -20,7 +20,7 @@ const AuthForm = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/api/auth/login/', {
+            const response = await axios.post('http://35.178.29.251:8000/api/auth/login/', {
                 username,
                 password,
             });
@@ -30,15 +30,15 @@ const AuthForm = () => {
             setError(null);
             navigate("/");
         } catch (err) {
-            setError('Invalid Email or Password');
-            setSuccess(null);
+           setError('Invalid Email or Password');
+           setSuccess(null);
         }
     };
 
     const handleSubmitSignUp = async (event) => {
         event.preventDefault();
         try {
-            await axios.post('http://localhost:8000/api/auth/register/', {
+            await axios.post('http://35.178.29.251:8000/api/auth/register/', {
                 username,
                 email,
                 password,

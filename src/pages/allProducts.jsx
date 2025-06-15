@@ -20,7 +20,7 @@ const AllProducts = () => {
   const categories = ["Category 1", "Category 2", "Category 3"];
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/listing/productListing/', {
+    fetch('http://35.178.29.251:8000/api/listing/productListing/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

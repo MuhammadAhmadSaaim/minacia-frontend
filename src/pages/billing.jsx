@@ -49,7 +49,7 @@ function Billing() {
             user: id
         };
         try {
-            await axios.post('http://localhost:8000/api/payment/save-payment/', paymentInfo,{
+            await axios.post('http://35.178.29.251:8000/api/payment/save-payment/', paymentInfo,{
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ function Billing() {
         };
 
         try {
-            await axios.post('http://localhost:8000/api/payment/save-billing-info/', billingInfo, {
+            await axios.post('http://35.178.29.251:8000/api/payment/save-billing-info/', billingInfo, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',

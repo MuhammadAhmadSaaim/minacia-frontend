@@ -36,8 +36,8 @@ function App() {
     //       <Route path="/termsandconditions" element={<TermAndConditions />} />
     //       <Route path="/returnpolicy" element={<ShippingAndReturns/>} />
     //     </Routes>
-      </Layout>
-    </Router>
+    //   </Layout>
+    // </Router>
   );
 }
 

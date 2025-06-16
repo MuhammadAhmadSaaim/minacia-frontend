@@ -51,7 +51,7 @@ const Lock = () => {
 
             {/* Background Image */}
             <img
-                src="images/DSC08937.jpg"
+                src="images/lock_bg_t.png"
                 alt="Background"
                 className="absolute h-full max-h-screen w-auto object-contain z-0"
             />
@@ -61,7 +61,7 @@ const Lock = () => {
 
             {/* Main Content */}
             <div className="relative z-10 text-center px-4 sm:px-8 max-w-lg w-full font-cormorant text-black">
-                <h1 className="text-3xl sm:text-4xl font-bold mb-2 uppercase">
+                <h1 className="text-3xl sm:text-4xl font-bold mb-2 uppercase" style={{minWidth: "max-content"}}>
                     Rule Breakers Move First
                 </h1>
 

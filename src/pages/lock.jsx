@@ -26,7 +26,7 @@ const Lock = () => {
         }
 
         try {
-            const response = await axios.post('http://35.178.29.251:8000/api/listing/subscribe/', {
+            const response = await axios.post('/api/listing/subscribe/', {
                 email: email,
             });
             setMessage('🎉 Subscribed successfully!');

@@ -61,9 +61,13 @@ const Lock = () => {
 
             {/* Main Content */}
             <div className="relative z-10 text-center px-4 sm:px-8 max-w-lg w-full font-cormorant text-black">
-                <h1 className="text-3xl sm:text-4xl font-bold mb-2 uppercase" style={{minWidth: "max-content"}}>
-                    Rule Breakers Move First
-                </h1>
+                <h1
+  className="text-center text-3xl sm:text-4xl font-bold mb-2 uppercase whitespace-normal sm:whitespace-nowrap mx-auto"
+  
+>
+  Rule Breakers Move First
+</h1>
+
 
                 <p className="text-gray-700 mb-4">
                     Prove you're one of us. Enter your email to stay notified.

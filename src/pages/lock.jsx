@@ -26,7 +26,7 @@ const Lock = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8000/api/listing/subscribe/', {
+            const response = await axios.post('http://35.178.29.251:8000/api/listing/subscribe/', {
                 email: email,
             });
             setMessage('🎉 Subscribed successfully!');
@@ -51,7 +51,7 @@ const Lock = () => {
 
             {/* Background Image */}
             <img
-                src="images/DSC08937.jpg"
+                src="images/lock_bg_t.png"
                 alt="Background"
                 className="absolute h-full max-h-screen w-auto object-contain z-0"
             />
@@ -61,9 +61,17 @@ const Lock = () => {
 
             {/* Main Content */}
             <div className="relative z-10 text-center px-4 sm:px-8 max-w-lg w-full font-cormorant text-black">
-                <h1 className="text-3xl sm:text-4xl font-bold mb-2 uppercase">
-                    Rule Breakers Move First
-                </h1>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-2 uppercase text-center leading-tight break-words sm:whitespace-nowrap">
+  <span className="block sm:hidden">
+    Rule Breakers<br />
+    Move First
+  </span>
+  <span className="hidden sm:inline">
+    Rule Breakers Move First
+  </span>
+</h1>
+
+
 
                 <p className="text-gray-700 mb-4">
                     Prove you're one of us. Enter your email to stay notified.

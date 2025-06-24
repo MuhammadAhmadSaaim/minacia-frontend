@@ -75,7 +75,9 @@ function Billing() {
                         'Content-Type': 'application/json',
                     }
                 }
-            );
+            ).then((resp) => {
+                window.location.href = resp.data.url
+            });
         } catch (err) {
             console.error('Error making payment:', err);
         }

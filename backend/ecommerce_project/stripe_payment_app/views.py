@@ -5,18 +5,22 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.conf import settings
+from django.http import HttpResponse
+from django.shortcuts import redirect
+
+
 from .models import Payment
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class CreateStripeCheckoutSession(APIView):
-    #permission_classes = [IsAuthenticated]
-    print("Stripe Payment")
+    permission_classes = [IsAuthenticated]
+    
     def post(self, request):
+        
         try:
             checkout_session = stripe.checkout.Session.create(
-                payment_method_types=['card'],
                 mode='payment',
                 line_items=[
                     {
@@ -36,7 +40,8 @@ class CreateStripeCheckoutSession(APIView):
                     'user_id': request.user.id,
                 }
             )
-
-            return Response({'sessionId': checkout_session['id']})
+            print("sending to stripe")
+#            print(checkout_session.url)
+            return Response({'url': checkout_session.url})
         except Exception as e:
             return Response({'error': str(e)}, status=400)

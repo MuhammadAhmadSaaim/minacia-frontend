@@ -4,6 +4,7 @@ import { setProducts } from '../redux/productSlice';
 import ListingCard from "../components/listingCard";
 
 const AllProducts = () => {
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,7 @@ const AllProducts = () => {
   const categories = ["Category 1", "Category 2", "Category 3"];
 
   useEffect(() => {
-    fetch('http://35.178.29.251:8000/api/listing/productListing/', {
+    fetch(`${BASE_URL}api/listing/productListing/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -7,6 +7,7 @@ import axios from 'axios';
 
 
 function Billing() {
+    const BASE_URL = process.env.REACT_APP_BACKEND_URL
     const id =  useSelector(state => state.token.id)
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -49,7 +50,7 @@ function Billing() {
             user: id
         };
         try {
-            await axios.post('http://35.178.29.251:8000/api/payment/save-payment/', paymentInfo,{
+            await axios.post(`${BASE_URL}/api/payment/save-payment/`, paymentInfo,{
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
@@ -58,6 +59,25 @@ function Billing() {
             );
         } catch (err) {
             console.error('Error saving payment:', err);
+        }
+    };
+
+    const stripePayment = async () => {
+        const paymentInfo = {
+            method: 'stripe',
+            amount: price,
+            user: id
+        };
+        try {
+            await axios.post(`${BASE_URL}/api/stripe/create-stripe-session/`, paymentInfo,{
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
+        } catch (err) {
+            console.error('Error making payment:', err);
         }
     };
 
@@ -73,7 +93,7 @@ function Billing() {
         };
 
         try {
-            await axios.post('http://35.178.29.251:8000/api/payment/save-billing-info/', billingInfo, {
+            await axios.post(`${BASE_URL}/api/payment/save-billing-info/`, billingInfo, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -178,12 +198,22 @@ function Billing() {
                             {!isFormValid ? 
                                 <button
                                     className="w-full py-2 px-4 text-white rounded bg-gray-600"
-                                    disabled={!isFormValid}
-                                >
-                                    PayPal
-                                </button>
+                                    disabled={!isFormValid}>PayPal</button>
                                 :
                                 <Payment amount={price} name={totalItems} saveInfo={saveInfo}/>
+                            }
+                            {!isFormValid ? 
+                                <button
+                                    className="w-full py-2 px-4 text-white rounded bg-gray-600"
+                                    disabled={!isFormValid}>Stripe</button>
+                                :
+                                //<Payment amount={price} name={totalItems} saveInfo={saveInfo}/>
+                                
+                                    <button className="w-full py-2 px-4 text-white rounded bg-purple-600" type="submit"
+                                    onClick={stripePayment}>
+                                        STRIPE CHECKOUT
+                                    </button>
+                                
                             }
                         </div>
                     </div>

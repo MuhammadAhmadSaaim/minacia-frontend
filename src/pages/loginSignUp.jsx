@@ -7,6 +7,7 @@ import { setToken, setId } from '../redux/jwtSlice';
 import axios from 'axios';
 
 const AuthForm = () => {
+    const BASE_URL = process.env.REACT_APP_BACKEND_URL
     const [isSignUp, setIsSignUp] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [username, setUsername] = useState('');
@@ -20,7 +21,7 @@ const AuthForm = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://35.178.29.251:8000/api/auth/login/', {
+            const response = await axios.post(`${BASE_URL}/api/auth/login/`, {
                 username,
                 password,
             });
@@ -38,7 +39,7 @@ const AuthForm = () => {
     const handleSubmitSignUp = async (event) => {
         event.preventDefault();
         try {
-            await axios.post('http://35.178.29.251:8000/api/auth/register/', {
+            await axios.post(`${BASE_URL}/api/auth/register/`, {
                 username,
                 email,
                 password,

@@ -25,4 +25,5 @@ urlpatterns = [
     path('api/auth/', include('my_auth.urls')),
     path('api/listing/', include('ecommerce_app.urls')),
     path('api/payment/', include('paypal_payment_app.urls')),
+    path('api/stripe/', include('stripe_payment_app.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

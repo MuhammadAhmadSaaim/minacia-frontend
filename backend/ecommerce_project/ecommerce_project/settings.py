@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from datetime import timedelta
 import os
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,8 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-c4%*9u0etckd0go%s5(#%^9ts2eo#0qc6_uj&!fktimc6z&shi'
 
-STRIPE_SECRET_KEY = ''
-STRIPE_PUBLISHABLE_KEY = 'your-publishable-key'
+
+
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
+
+
 BACKEND_ADDR = "http://localhost:8000/" # replace with real when in production
 
 # SECURITY WARNING: don't run with debug turned on in production!

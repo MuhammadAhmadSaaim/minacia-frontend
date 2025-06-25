@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-c4%*9u0etckd0go%s5(#%^9ts2eo#0qc6_uj&!fktimc6z&shi'
 
-STRIPE_SECRET_KEY = 'your-secret-key'
+STRIPE_SECRET_KEY = ''
 STRIPE_PUBLISHABLE_KEY = 'your-publishable-key'
 BACKEND_ADDR = "http://localhost:8000/" # replace with real when in production
 

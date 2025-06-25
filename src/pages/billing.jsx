@@ -80,6 +80,7 @@ function Billing() {
             });
         } catch (err) {
             console.error('Error making payment:', err);
+            navigate("/login");
         }
     };
 
@@ -112,7 +113,7 @@ function Billing() {
 
     return (
         <div>
-            <script src="https://www.paypal.com/sdk/js?client-id=AZPCdxk14CNhais6QslHvejE79DoqCfe7IUPFVt1g8Tw9k4UPCRv_CKPUDhg6CXeZpy2E0ZTn-ZVSuJw&currency=USD"></script>
+           
             <div className="min-h-screen mt-14 md:mt-36">
                 <div className="container px-6 py-12 mx-auto flex flex-col md:flex-row sm:flex-cols gap-4">
                     <div className="md:w-3/4">
@@ -197,13 +198,6 @@ function Billing() {
                                 <span className="font-semibold">Total</span>
                                 <span className="font-semibold">{price}</span>
                             </div>
-                            {!isFormValid ? 
-                                <button
-                                    className="w-full py-2 px-4 text-white rounded bg-gray-600"
-                                    disabled={!isFormValid}>PayPal</button>
-                                :
-                                <Payment amount={price} name={totalItems} saveInfo={saveInfo}/>
-                            }
                             {!isFormValid ? 
                                 <button
                                     className="w-full py-2 px-4 text-white rounded bg-gray-600"

@@ -13,7 +13,7 @@ const ProductListing = () => {
     const productsPerPage = 10;
 
     useEffect(() => {
-        fetch('http://localhost:8000/api/listing/productListing/', {
+        fetch('http://35.178.29.251:8000/api/listing/productListing/', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

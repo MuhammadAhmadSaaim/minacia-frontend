@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-c4%*9u0etckd0go%s5(#%^9ts2eo#0qc6_uj&!fktimc6z&shi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -147,6 +147,8 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/build/static')
 ]
+#new line added by Chaudhary Ali Muhammad Nawaz
+STATIC_ROOT = '/home/ubuntu/minacia/staticfiles/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

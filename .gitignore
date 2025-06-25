@@ -2,6 +2,7 @@ venv/
 /node_modules
 /.pnp
 .pnp.js
+backend/ecommerce_project/env/
 
 # testing
 /coverage

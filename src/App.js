@@ -16,27 +16,28 @@ import ShippingAndReturns from "./pages/ShippingAndReturns";
 
 function App() {
   return (
-    <Router>
-      {/* default route launch */}
+    <Lock />
+    // <Router>
+    //   {/* default route launch */}
 
-      <Layout className="bg-white">
-        <Routes>
-          <Route path="/launch" element={<Lock />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/product-details/:id" element={<ProductDetails />} />
-          <Route path="/all-products" element={<AllProducts />} />
-          <Route path="/product-listings" element={<ProductListing />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/contact-us" element={<Contact />} />
-          <Route path="/billing" element={<Billing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/Faqs" element={<FAQs />} />
-          <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-          <Route path="/termsandconditions" element={<TermAndConditions />} />
-          <Route path="/returnpolicy" element={<ShippingAndReturns/>} />
-        </Routes>
-      </Layout>
-    </Router>
+    //   <Layout className="bg-white">
+    //     <Routes>
+    //       <Route path="/launch" element={<Lock />} />
+    //       <Route path="/" element={<Home />} />
+    //       <Route path="/product-details/:id" element={<ProductDetails />} />
+    //       <Route path="/all-products" element={<AllProducts />} />
+    //       <Route path="/product-listings" element={<ProductListing />} />
+    //       <Route path="/cart" element={<Cart />} />
+    //       <Route path="/contact-us" element={<Contact />} />
+    //       <Route path="/billing" element={<Billing />} />
+    //       <Route path="/login" element={<Login />} />
+    //       <Route path="/Faqs" element={<FAQs />} />
+    //       <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+    //       <Route path="/termsandconditions" element={<TermAndConditions />} />
+    //       <Route path="/returnpolicy" element={<ShippingAndReturns/>} />
+    //     </Routes>
+    //   </Layout>
+    // </Router>
   );
 }
 

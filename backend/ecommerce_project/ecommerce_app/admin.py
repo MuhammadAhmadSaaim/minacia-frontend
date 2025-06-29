@@ -3,9 +3,9 @@ from .models import *
 
 
 class MyAdminSite(admin.AdminSite):
-    site_header = "Minicia Administrator"  
-    site_title = "Minicia"    
-    index_title = "Welcome to Minicia"
+    site_header = "Minacia Administrator"  
+    site_title = "Minacia"    
+    index_title = "Welcome to Minacia"
 
 admin_site = MyAdminSite(name='myadmin')
 
@@ -24,3 +24,4 @@ admin_site.register(Cart)
 admin_site.register(CartProduct)
 admin_site.register(OrderProduct)
 admin_site.register(Subscriber)
+admin_site.register(AdditionalPays)

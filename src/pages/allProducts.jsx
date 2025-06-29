@@ -17,11 +17,8 @@ const AllProducts = () => {
   const [sortOption, setSortOption] = useState("newest");
   const productsPerPage = 12;
 
-  // Dummy categories
-  const categories = ["Category 1", "Category 2", "Category 3"];
-
   useEffect(() => {
-    fetch(`${BASE_URL}api/listing/productListing/`, {
+    fetch(`${BASE_URL}/api/listing/productListing/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -109,14 +106,7 @@ const AllProducts = () => {
     setCurrentPage(pageNumber);
   };
 
-  const toggleCategoryDropdown = () => {
-    setOpenCategories(!openCategories);
-  };
 
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-    setCurrentPage(1); // Reset pagination to page 1 after selecting a category
-  };
 
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
@@ -176,35 +166,7 @@ const AllProducts = () => {
                   className="border border-gray-300 mt-1 p-2 w-full rounded-md"
                 />
               </div>
-
-              {/* Categories Dropdown */}
-              <div className="px-4 py-2">
-                <div className="flex items-center justify-between cursor-pointer text-gray-700 text-sm font-cormorant mb-1">
-                  <span onClick={() => toggleCategoryDropdown()}>
-                    Categories
-                  </span>
-                  <button
-                    onClick={() => toggleCategoryDropdown()}
-                    className="text-gray-500 focus:outline-none"
-                  >
-                    {openCategories ? "−" : "+"}
-                  </button>
-                </div>
-
-                {openCategories && (
-                  <ul className="pl-4 mt-2">
-                    {categories.map((category) => (
-                      <li
-                        key={category}
-                        className="font-cormorant cursor-pointer"
-                        onClick={() => handleCategoryClick(category)}
-                      >
-                        {category}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+              
             </div>
           )}
         </div>

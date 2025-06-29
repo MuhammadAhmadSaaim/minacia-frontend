@@ -32,7 +32,7 @@ const ProductDetails = () => {
     const handleAddToCart = () => {
         dispatch(addToCart({ product, quantity }));
         navigate("/cart")
-      };
+    };
 
     return (
         <div>
@@ -47,7 +47,7 @@ const ProductDetails = () => {
                                     <img
                                         src={imageObj.image}
                                         alt={`Product Image ${index + 1}`}
-                                        className="h-full w-auto object-contain" 
+                                        className="h-full w-auto object-contain"
                                     />
                                 </div>
                             </div>
@@ -62,29 +62,6 @@ const ProductDetails = () => {
 
                     {/* Color Selection */}
                     <p className="text-base lg:text-lg text-gray-600 mb-2 font-cormorant">{product.description}</p>
-
-                    <div className="mb-4">
-                        <p className="text-base lg:text-lg text-gray-600 mb-2 font-cormorant">Available Colors:</p>
-                        <div className="flex space-x-4">
-                            {colors.map((color) => (
-                                <button
-                                    key={color.name}
-                                    onClick={() => setSelectedColor(color.name)}
-                                    className={`px-4 py-2 border text-base lg:text-lg font-cormorant ${selectedColor === color.name ? 'bg-black text-white' : 'border-gray-400 text-gray-600'
-                                        }`}
-                                >
-                                    {color.name}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Selected Color and Reference Code */}
-                    <p className="text-base lg:text-lg text-gray-600 mb-4 font-cormorant">
-                        Selected Color: {selectedColor} <br />
-                        Ref: {colors.find((color) => color.name === selectedColor).code}
-                    </p>
-
                     {/* Price */}
                     <p className="text-xl lg:text-3xl font-semibold mb-6 font-cormorant">${product.price}</p>
 
@@ -119,41 +96,19 @@ const ProductDetails = () => {
                     </p>
                 </div>
             </div>
+            {product.details && product.details.length > 0 && (
+                <div className="mt-16 p-6 lg:p-12">
+                    <h3 className="text-2xl lg:text-4xl font-bold mb-6 font-cormorant">Product Details</h3>
+                    <ul className="list-disc list-inside space-y-4 text-gray-600 font-cormorant">
+                        {product.details.map((item, index) => (
+                            <li key={index} className="text-base lg:text-lg">
+                                {item}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
 
-            {/* Additional Info Section */}
-            <div className="mt-16 p-6 lg:p-12">
-                <h3 className="text-2xl lg:text-4xl font-bold mb-6 font-cormorant">Product Details</h3>
-
-                <ul className="list-none space-y-4">
-                    <li className="text-base lg:text-lg text-gray-600 font-cormorant">
-                        <strong>Style:</strong> 807469 XNA4F 6207
-                    </li>
-                    <li className="text-base lg:text-lg text-gray-600 font-cormorant">
-                        <strong>Collection:</strong> Fall Winter 2024
-                    </li>
-                    <li className="text-base lg:text-lg text-gray-600 font-cormorant">
-                        <strong>Material:</strong> Gucci Rosso Ancora red GG embossed leather, Neoprene lined for added flexibility
-                    </li>
-                    <li className="text-base lg:text-lg text-gray-600 font-cormorant">
-                        <strong>Buttons:</strong> Self-covered buttons
-                    </li>
-                    <li className="text-base lg:text-lg text-gray-600 font-cormorant">
-                        <strong>Details:</strong> Point collar, Two chest pockets, Detachable leather belt with Double G buckle
-                    </li>
-                    <li className="text-base lg:text-lg text-gray-600 font-cormorant">
-                        <strong>Length:</strong> 70cm (based on size 38 IT)
-                    </li>
-                    <li className="text-base lg:text-lg text-gray-600 font-cormorant">
-                        <strong>Sleeve Length:</strong> 83.5cm (based on size 38 IT)
-                    </li>
-                    <li className="text-base lg:text-lg text-gray-600 font-cormorant">
-                        <strong>Material Composition:</strong> Genuine Lambskin leather, 100% Cupro lining
-                    </li>
-                    <li className="text-base lg:text-lg text-gray-600 font-cormorant">
-                        <strong>Origin:</strong> Made in Italy
-                    </li>
-                </ul>
-            </div>
         </div>
     );
 };

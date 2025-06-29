@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateQuantity, removeFromCart } from '../redux/cartSlice';
@@ -7,8 +7,23 @@ const Cart = () => {
     const cartItems = useSelector(state => state.cart.items);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+    const [shipping, setShipping] = useState(0);
+    const [taxRate, setTaxRate] = useState(0);
 
-    const shipping = 10;
+    // Fetch dynamic shipping and tax values
+    useEffect(() => {
+        fetch(`${BASE_URL}/api/listing/additionalPays/`)
+            .then(res => res.json())
+            .then(data => {
+                setShipping(parseFloat(data.shipping));
+                setTaxRate(parseFloat(data.tax));
+                console.log('Shipping:', data.shipping, 'Tax Rate:', data.tax);
+            })
+            .catch(err => {
+                console.error('Error fetching tax/shipping:', err);
+            });
+    }, []);
 
     const handleRemove = (id) => {
         dispatch(removeFromCart({ productId: id }));
@@ -19,9 +34,8 @@ const Cart = () => {
     };
 
     const subtotal = cartItems.reduce((sum, item) => sum + parseFloat(item.price.replace('Rs', '')) * item.quantity, 0);
-    const taxes = subtotal * 0.17;
+    const taxes = subtotal * (taxRate / 100); 
     const totalPrice = subtotal + taxes + shipping;
-
     return (
         <div className="cart-content mt-20">
             <div className="md:hidden shopping-bag w-full min-w-full">

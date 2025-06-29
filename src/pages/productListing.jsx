@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom'; 
 import { useDispatch } from 'react-redux';
 import { setProducts } from '../redux/productSlice';
 import ListingHeader from '../components/listingHeader';
@@ -12,9 +13,17 @@ const ProductListing = () => {
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 10;
+    const { categoryId } = useParams();
+    const [categoryName, setCategoryName] = useState("Products"); 
+
 
     useEffect(() => {
-        fetch(`${BASE_URL}/api/listing/productListing/`, {
+        if (!categoryId) return;
+        
+
+        setLoading(true); 
+
+        fetch(`${BASE_URL}/api/listing/productListing/${categoryId}/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -28,8 +37,9 @@ const ProductListing = () => {
             })
             .then(data => {
                 setData(data);
-                if (data) {
-                    dispatch(setProducts(data));
+                dispatch(setProducts(data));
+                if (data.length > 0 && data[0].category_name) {
+                    setCategoryName(data[0].category_name); 
                 }
                 setLoading(false);
             })
@@ -37,27 +47,19 @@ const ProductListing = () => {
                 setError(error);
                 setLoading(false);
             });
-    }, [dispatch]);
-
+    }, [dispatch, categoryId]); 
     // Pagination logic
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
     const currentProducts = data.slice(indexOfFirstProduct, indexOfLastProduct);
-
-    // Calculate total pages
     const totalPages = Math.ceil(data.length / productsPerPage);
 
-    // Handlers for pagination
     const handlePreviousPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
     };
-    
+
     const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-        }
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
     };
 
     const handlePageClick = (pageNumber) => {
@@ -69,15 +71,15 @@ const ProductListing = () => {
 
     return (
         <div>
-            <ListingHeader title="Women" />
+            <ListingHeader title={categoryName} />
             <div className="flex-wrap mx-auto mt-40 mb-24 flex justify-around px-10">
                 {currentProducts.map((product, index) => {
                     const imageUrl = (product.images && product.images.length > 0)
                         ? product.images[0].image
-                        : 'https://example.com/placeholder-image.jpg'; 
+                        : 'https://example.com/placeholder-image.jpg';
                     const imageHoverUrl = (product.images && product.images.length > 1)
                         ? product.images[1].image
-                        : imageUrl; 
+                        : imageUrl;
 
                     return (
                         <ListingCard
@@ -92,12 +94,10 @@ const ProductListing = () => {
                     );
                 })}
             </div>
+
             <div className="flex justify-center mb-8">
                 <button
-                    className={`px-4 py-2 uppercase font-cormorant ${currentPage === 1
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:underline"
-                        }`}
+                    className={`px-4 py-2 uppercase font-cormorant ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "hover:underline"}`}
                     onClick={handlePreviousPage}
                     disabled={currentPage === 1}
                 >
@@ -106,20 +106,14 @@ const ProductListing = () => {
                 {[...Array(totalPages)].map((_, index) => (
                     <button
                         key={index}
-                        className={`px-4 py-2 uppercase font-cormorant text-2xl ${currentPage === index + 1
-                            ? "text-black underline"
-                            : "text-gray-600 hover:underline"
-                            }`}
+                        className={`px-4 py-2 uppercase font-cormorant text-2xl ${currentPage === index + 1 ? "text-black underline" : "text-gray-600 hover:underline"}`}
                         onClick={() => handlePageClick(index + 1)}
                     >
                         {index + 1}
-                    </button>   
+                    </button>
                 ))}
                 <button
-                    className={`px-4 py-2 uppercase font-cormorant ${currentPage === totalPages
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:underline"
-                        }`}
+                    className={`px-4 py-2 uppercase font-cormorant ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "hover:underline"}`}
                     onClick={handleNextPage}
                     disabled={currentPage === totalPages}
                 >

@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'my_auth',
     'ecommerce_app',
-    'paypal_payment_app',
     'stripe_payment_app',
 ]
 

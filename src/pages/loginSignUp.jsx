@@ -169,7 +169,7 @@ const AuthForm = () => {
 
                 {/* Background Panel */}
                 <div className="absolute w-1/2 h-full right-0 top-0 flex items-center justify-center text-white z-0"
-                     style={{ backgroundImage: "url('/images/background.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                     style={{ backgroundImage: "url('/images/category.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
                     <div className="absolute inset-0 bg-black opacity-65" />
                     <div className='relative z-10 flex flex-col items-center justify-center'>
                         <h1 className="text-5xl text-center font-bold">{isSignUp ? "Welcome Back!" : "Halo, Minacia!"}</h1>

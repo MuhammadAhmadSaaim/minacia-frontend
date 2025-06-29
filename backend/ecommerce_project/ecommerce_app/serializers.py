@@ -1,7 +1,11 @@
 from rest_framework import serializers
-from .models import Product, ProductImage, CartProduct, Cart, Subscriber
+from .models import Product, ProductImage, AdditionalPays, Subscriber, ProductCategory
 
 
+class AdditionalPaysSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdditionalPays
+        fields = ['Tax', 'Shipping']
 
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,6 +21,10 @@ class ProductListingSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__' 
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductCategory
+        fields = ['id', 'name']
 
 class SubscriberSerializer(serializers.ModelSerializer):
     class Meta:

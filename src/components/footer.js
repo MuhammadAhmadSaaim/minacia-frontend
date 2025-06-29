@@ -35,7 +35,8 @@ function Footer() {
                         <h3 className="text-4xl font-bold tracking-wide uppercase font-cormorant text-white">Minacia</h3>
                         <div className="mt-3 lg:max-w-sm">
                             <p className="text-sm">
-                                Minacia Clothing redefines fashion by merging timeless elegance with modern sophistication. Our collections blend classic craftsmanship with cutting-edge design, offering a unique style that stands out. Experience the future of fashion with Luxeon, where luxury meets innovation.
+                               
+At Minacia, we don’t follow trends we disrupt them. Wear the Minacia, own the moment, and embrace the menace in fashion.
                             </p>
                         </div>
                     </div>
@@ -72,14 +73,14 @@ function Footer() {
                             </a>
                         </div>
                         <p className="mt-4 text-sm">
-                            Enjoy the ease of premium clothing delivered right to your door, combining elegance with modern trends. Elevate your wardrobe seamlessly and make a statement with Minacia.
+                        We will have Instagram, TikTok and Twitter and no writing.
                         </p>
                         
                     </div>
                 </div>
                 <div className="flex flex-col-reverse justify-between pb-10 lg:flex-row">
                     <p className="text-sm text-white">
-                        © Copyright 2020 Minacia Inc. All rights reserved.
+                        © Copyright  2025 Minacia Ltd. All rights reserved.
                     </p>
                     <ul className="flex flex-col mb-3 space-y-2 lg:mb-0 sm:space-y-0 sm:space-x-5 sm:flex-row">
                         <li>

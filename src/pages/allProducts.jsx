@@ -4,7 +4,9 @@ import { setProducts } from '../redux/productSlice';
 import ListingCard from "../components/listingCard";
 
 const AllProducts = () => {
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
   const dispatch = useDispatch();
+
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,31 +14,21 @@ const AllProducts = () => {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [priceRange, setPriceRange] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [openCategories, setOpenCategories] = useState(false);
   const [sortOption, setSortOption] = useState("newest");
   const productsPerPage = 12;
 
-  // Dummy categories
-  const categories = ["Category 1", "Category 2", "Category 3"];
-
   useEffect(() => {
-    fetch('http://35.178.29.251:8000/api/listing/productListing/', {
+    fetch(`${BASE_URL}/api/listing/productListing/`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
+      headers: { 'Content-Type': 'application/json' }
     })
       .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
+        if (!response.ok) throw new Error('Network response was not ok');
         return response.json();
       })
       .then(data => {
         setData(data);
-        if (data) {
-          dispatch(setProducts(data));
-        }
+        dispatch(setProducts(data));
         setLoading(false);
       })
       .catch(error => {
@@ -46,88 +38,68 @@ const AllProducts = () => {
   }, [dispatch]);
 
   const applyFilters = (products) => {
-    let filteredProducts = products;
+    let filtered = [...products];
 
-    // Filter by category
     if (selectedCategory !== "All Categories") {
-      filteredProducts = filteredProducts.filter((product) =>
-        product.category === selectedCategory
-      );
+      filtered = filtered.filter(p => p.category_name === selectedCategory);
     }
 
-    // Filter by price range
     if (priceRange) {
-      const [minPrice, maxPrice] = priceRange.split("-").map(Number);
-      if (minPrice && maxPrice) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.price >= minPrice && product.price <= maxPrice
-        );
+      const [min, max] = priceRange.split("-").map(Number);
+      if (!isNaN(min) && !isNaN(max)) {
+        filtered = filtered.filter(p => p.price >= min && p.price <= max);
       }
     }
 
-    // Sort the products
-    let sortedProducts = [...filteredProducts]; // Create a shallow copy for sorting
     if (sortOption === "priceLowHigh") {
-      sortedProducts.sort((a, b) => a.price - b.price);
+      filtered.sort((a, b) => a.price - b.price);
     } else if (sortOption === "priceHighLow") {
-      sortedProducts.sort((a, b) => b.price - a.price);
+      filtered.sort((a, b) => b.price - a.price);
     } else if (sortOption === "newest") {
-      sortedProducts.sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at)
-      );
+      filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     }
 
-    return sortedProducts; // Return the sorted products
+    return filtered;
   };
 
   const filteredProducts = applyFilters(data);
 
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  // Flattened variants per product
+  const allVariants = filteredProducts.flatMap(product => {
+    return product.color_variants?.map((variant, idx) => {
+      const images = variant.images || [];
+      const imageUrl = images.length > 0 ? images[0].image : "https://via.placeholder.com/300x300.png?text=No+Image";
+      const imageHoverUrl = images.length > 1 ? images[1].image : imageUrl;
 
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
+      return {
+        id: product.id,
+        name: `${product.name} - ${variant.color_name}`,
+        price: product.price,
+        image: imageUrl,
+        imageHover: imageHoverUrl,
+        category: product.category_name,
+        key: `${product.id}-${variant.color_name}-${idx}`
+      };
+    }) || [];
+  });
 
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const indexOfLast = currentPage * productsPerPage;
+  const indexOfFirst = indexOfLast - productsPerPage;
+  const currentProducts = allVariants.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(allVariants.length / productsPerPage);
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handlePageClick = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const toggleCategoryDropdown = () => {
-    setOpenCategories(!openCategories);
-  };
-
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-    setCurrentPage(1); // Reset pagination to page 1 after selecting a category
-  };
-
+  const handlePageClick = (page) => setCurrentPage(page);
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
-    setCurrentPage(1); // Reset pagination to page 1 after changing sort
+    setCurrentPage(1);
   };
 
   return (
     <div>
-      {/* Image with Title */}
+      {/* Header Image */}
       <div className="relative h-80 mb-6">
         <img
-          src="/images/bgtemp.jpg"
+          src="/images/banner.jpg"
           alt="All Products"
           className="w-full h-full object-cover"
         />
@@ -136,9 +108,8 @@ const AllProducts = () => {
         </h1>
       </div>
 
-      {/* Fixed Filter and Sort Bar */}
+      {/* Filter/Sort Bar */}
       <div className="top-16 bg-white z-10 w-full flex justify-end items-center px-4 py-1">
-        {/* Filter Section */}
         <div className="relative w-full sm:w-auto mr-4">
           <button
             className="text-black uppercase font-cormorant hover:text-black border-none focus:outline-none flex items-center space-x-1"
@@ -152,67 +123,28 @@ const AllProducts = () => {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M19 9l-7 7-7-7"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
           {categoryOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white shadow-md rounded-md z-10">
-              {/* Price Range Filter */}
               <div className="px-4 py-2 border-b">
-                <label className="text-gray-700 text-sm font-cormorant">
-                  Price Range
-                </label>
+                <label className="text-gray-700 text-sm font-cormorant">Price Range</label>
                 <input
                   type="text"
-                  placeholder="e.g. $10 - $50"
+                  placeholder="e.g. 500 - 2000"
                   value={priceRange}
                   onChange={(e) => setPriceRange(e.target.value)}
                   className="border border-gray-300 mt-1 p-2 w-full rounded-md"
                 />
               </div>
-
-              {/* Categories Dropdown */}
-              <div className="px-4 py-2">
-                <div className="flex items-center justify-between cursor-pointer text-gray-700 text-sm font-cormorant mb-1">
-                  <span onClick={() => toggleCategoryDropdown()}>
-                    Categories
-                  </span>
-                  <button
-                    onClick={() => toggleCategoryDropdown()}
-                    className="text-gray-500 focus:outline-none"
-                  >
-                    {openCategories ? "−" : "+"}
-                  </button>
-                </div>
-
-                {openCategories && (
-                  <ul className="pl-4 mt-2">
-                    {categories.map((category) => (
-                      <li
-                        key={category}
-                        className="font-cormorant cursor-pointer"
-                        onClick={() => handleCategoryClick(category)}
-                      >
-                        {category}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
             </div>
           )}
         </div>
 
-        {/* Sort By */}
+        {/* Sort */}
         <div className="relative w-full sm:w-auto mb-1">
-          <label className="text-black uppercase font-cormorant text-sm mr-2">
-            Sort by:
-          </label>
+          <label className="text-black uppercase font-cormorant text-sm mr-2">Sort by:</label>
           <select
             value={sortOption}
             onChange={handleSortChange}
@@ -225,68 +157,50 @@ const AllProducts = () => {
         </div>
       </div>
 
+      {/* Product Grid */}
       <div className="flex-wrap mx-auto mt-40 mb-24 flex justify-around px-10">
-        {currentProducts.map((product, index) => {
-          const imageUrl = (product.images && product.images.length > 0)
-            ? product.images[0].image
-            : 'https://example.com/placeholder-image.jpg';
-          const imageHoverUrl = (product.images && product.images.length > 1)
-            ? product.images[1].image
-            : imageUrl;
-
-          return (
-            <ListingCard
-              key={index}
-              id={product.id}
-              name={product.name}
-              price={product.price}
-              image={imageUrl}
-              imageHover={imageHoverUrl}
-              category={product.category_name}
-            />
-          );
-        })}
+        {currentProducts.map((variant) => (
+          <ListingCard
+            key={variant.key}
+            id={variant.id}
+            name={variant.name}
+            price={variant.price}
+            image={variant.image}
+            imageHover={variant.imageHover}
+            category={variant.category}
+          />
+        ))}
       </div>
 
-      {/* Pagination Controls */}
+      {/* Pagination */}
       <div className="flex justify-center mt-8 space-x-2">
         <button
-          className={`px-4 py-2 uppercase font-cormorant ${currentPage === 1
-            ? "opacity-50 cursor-not-allowed"
-            : "hover:underline"
-            }`}
-          onClick={handlePreviousPage}
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
+          className={`px-4 py-2 uppercase font-cormorant ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "hover:underline"}`}
         >
           Previous
         </button>
-        {[...Array(totalPages)].map((_, index) => (
+        {Array.from({ length: totalPages }, (_, i) => (
           <button
-            key={index}
-            className={`px-4 py-2 uppercase font-cormorant ${currentPage === index + 1
-              ? "font-bold"
-              : "hover:underline"
-              }`}
-            onClick={() => handlePageClick(index + 1)}
+            key={i}
+            onClick={() => handlePageClick(i + 1)}
+            className={`px-4 py-2 uppercase font-cormorant ${currentPage === i + 1 ? "font-bold" : "hover:underline"}`}
           >
-            {index + 1}
+            {i + 1}
           </button>
         ))}
         <button
-          className={`px-4 py-2 uppercase font-cormorant ${currentPage === totalPages
-            ? "opacity-50 cursor-not-allowed"
-            : "hover:underline"
-            }`}
-          onClick={handleNextPage}
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
+          className={`px-4 py-2 uppercase font-cormorant ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "hover:underline"}`}
         >
           Next
         </button>
       </div>
 
-      {/* Error Handling */}
+      {/* Error/Loading */}
       {error && <div className="text-red-500">{error.message}</div>}
-      {/* Loading Indicator */}
       {loading && <div>Loading...</div>}
     </div>
   );

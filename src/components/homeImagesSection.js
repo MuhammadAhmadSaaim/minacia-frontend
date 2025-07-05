@@ -5,12 +5,12 @@ const HomeImagesSection = () => {
     const navigate = useNavigate();
     const cards = [
         {
-            imageUrl: '/images/7.jpg',
+            imageUrl: '/images/frontpage_one.jpg',
             title: 'Women',
             description: 'Explore Women\'s Collection',
         },
         {
-            imageUrl: '/images/8.jpg',
+            imageUrl: '/images/frontpage_two.jpg',
             title: 'Women',
             description: 'Explore Women\'s Velvet Collection',
         },

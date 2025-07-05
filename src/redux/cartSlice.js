@@ -7,12 +7,21 @@ const cartSlice = createSlice({
     },
     reducers: {
         addToCart: (state, action) => {
-            const { product, quantity } = action.payload;
-            const existingProductIndex = state.items.findIndex(item => item.id === product.id);
+            const { product, quantity, selectedColor } = action.payload;
+
+            // Check for existing product + same color variant in cart
+            const existingProductIndex = state.items.findIndex(
+                item => item.id === product.id && item.selectedColor?.id === selectedColor?.id
+            );
+
             if (existingProductIndex >= 0) {
                 state.items[existingProductIndex].quantity += quantity;
             } else {
-                state.items.push({ ...product, quantity });
+                state.items.push({
+                    ...product,
+                    quantity,
+                    selectedColor,
+                });
             }
         },
         updateQuantity: (state, action) => {

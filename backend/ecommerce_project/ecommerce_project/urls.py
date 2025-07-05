@@ -22,7 +22,8 @@ from ecommerce_app.admin import admin_site
 
 urlpatterns = [
     path('admin/', admin_site.urls),
+    path('nested_admin/', include('nested_admin.urls')),
     path('api/auth/', include('my_auth.urls')),
     path('api/listing/', include('ecommerce_app.urls')),
-    path('api/payment/', include('paypal_payment_app.urls')),
+    path('api/stripe/', include('stripe_payment_app.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

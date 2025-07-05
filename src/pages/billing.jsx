@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import Payment from '../components/payment'; 
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearCart } from '../redux/cartSlice';
 import axios from 'axios';
 
 
 function Billing() {
-    const id =  useSelector(state => state.token.id)
-    const dispatch = useDispatch();
+    const BASE_URL = process.env.REACT_APP_BACKEND_URL
+    const id = useSelector(state => state.token.id)
     const navigate = useNavigate();
     const location = useLocation();
-    const [error, setError] =  useState();
+    const [error, setError] = useState();
     const { totalItems, price } = location.state || {};
     const token = useSelector(state => state.token?.token?.access);
-    
+
     const [formData, setFormData] = useState({
         name: '',
         address: '',
@@ -42,55 +40,72 @@ function Billing() {
         }));
     };
 
-    const savePayment = async () => {
+
+    const stripePayment = async () => {
         const paymentInfo = {
-            method: 'paypal',
+            method: 'stripe',
             amount: price,
             user: id
         };
         try {
-            await axios.post('http://35.178.29.251:8000/api/payment/save-payment/', paymentInfo,{
+            await saveInfo();
+
+            const resp = await axios.post(`${BASE_URL}/api/stripe/create-stripe-session/`, paymentInfo, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            window.location.href = resp.data.url;
+
+        } catch (err) {
+            console.error('Error making payment:', err);
+            if (err.response?.status === 401) {
+                navigate("/login");
+            } else {
+                setError("Something went wrong while processing payment.");
+            }
+        }
+    };
+
+
+    const saveInfo = async () => {
+        try {
+            const check = await axios.get(`${BASE_URL}/api/stripe/check-billing-info/`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+
+            if (!check.data.exists) {
+                const billingInfo = {
+                    name: formData.name,
+                    address: formData.address,
+                    email: formData.email,
+                    phone: formData.phone,
+                    user: id
+                };
+
+                await axios.post(`${BASE_URL}/api/stripe/save-billing-info/`, billingInfo, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     }
-                }
-            );
+                });
+            }
         } catch (err) {
-            console.error('Error saving payment:', err);
-        }
-    };
-
-    const saveInfo = async () => {
-        const billingInfo = {
-            name: formData.name,
-            address: formData.address,
-            email: formData.email,
-            phone: formData.phone,
-            price,
-            total_items: totalItems,
-            user: id
-        };
-
-        try {
-            await axios.post('http://35.178.29.251:8000/api/payment/save-billing-info/', billingInfo, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                }
-            });
-            savePayment();
-            dispatch(clearCart());
-            navigate('/');
-
-        } catch (err) {
-            setError(err)    
+            if (err.response?.status === 401) {
+                navigate("/login");
+            } else {
+                setError(err.response?.data?.detail || "Billing info failed to save.");
+            }
         }
     };
 
     return (
         <div>
-            <script src="https://www.paypal.com/sdk/js?client-id=AZPCdxk14CNhais6QslHvejE79DoqCfe7IUPFVt1g8Tw9k4UPCRv_CKPUDhg6CXeZpy2E0ZTn-ZVSuJw&currency=USD"></script>
+
             <div className="min-h-screen mt-14 md:mt-36">
                 <div className="container px-6 py-12 mx-auto flex flex-col md:flex-row sm:flex-cols gap-4">
                     <div className="md:w-3/4">
@@ -164,7 +179,7 @@ function Billing() {
                             <h2 className="text-3xl text-black font-bold mb-4">Summary</h2>
                             <div className="flex text-gray-700 text-lg justify-between mb-2">
                                 <span>Price</span>
-                                <span>{price}</span>
+                                <span>£{price.toFixed(2)}</span>
                             </div>
                             <div className="flex text-gray-700 text-lg justify-between mb-8">
                                 <span>Total Items</span>
@@ -173,17 +188,20 @@ function Billing() {
                             <hr className="my-2" />
                             <div className="flex text-gray-700 text-lg justify-between mb-6">
                                 <span className="font-semibold">Total</span>
-                                <span className="font-semibold">{price}</span>
+                                <span className="font-semibold">£{price.toFixed(2)}</span>
                             </div>
-                            {!isFormValid ? 
+                            {!isFormValid ?
                                 <button
                                     className="w-full py-2 px-4 text-white rounded bg-gray-600"
-                                    disabled={!isFormValid}
-                                >
-                                    PayPal
-                                </button>
+                                    disabled={!isFormValid}>Stripe</button>
                                 :
-                                <Payment amount={price} name={totalItems} saveInfo={saveInfo}/>
+                                //<Payment amount={price} name={totalItems} saveInfo={saveInfo}/>
+
+                                <button className="w-full py-2 px-4 text-white rounded bg-purple-600" type="submit"
+                                    onClick={stripePayment}>
+                                    STRIPE CHECKOUT
+                                </button>
+
                             }
                         </div>
                     </div>

@@ -17,7 +17,7 @@ const Navbar = () => {
     const isHomePage = location.pathname === '/'; // Assuming home page is at "/"
     const isLaunchPage = location.pathname === '/launch';
 
-    
+
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 100) {
@@ -56,15 +56,22 @@ const Navbar = () => {
             {/* Background Section */}
             {isHomePage && (
                 <div className="relative h-screen flex justify-center bg-cover bg-center bg-no-repeat"
-                    style={{ backgroundImage: "url('/images/background.png')" }}
+                    style={{ backgroundImage: "url('/images/mainImage.png')" }}
                 >
                     <div className="absolute inset-0 bg-black opacity-65" />
                     <h1
-                        className={`text-6xl font-cormorant sm:text-10xl mt-48 ml-2 md:text-10xl lg:text-11xl lg:tracking-40px sm:tracking-wider tracking-widest text-white font-bold transition-all duration-700 ease-in-out${isScrolled ? 'opacity-0 translate-y-[-100%] scale-50 text-black' : 'opacity-100 translate-y-0 scale-100'
-                            } || ${isSearchActive ? 'opacity-0' : 'opacity-100'}`}
+                        className={`
+    text-6xl font-cormorant sm:text-10xl mt-48 ml-2 md:text-10xl lg:text-11xl
+    lg:tracking-40px sm:tracking-wider tracking-widest
+    font-bold sm:transition-all duration-700 ease-in-out
+    ${isScrolled ? 'opacity-0 translate-y-[-100%] scale-50 blur-sm' : 'opacity-100 translate-y-0 scale-100 blur-0'}
+    ${isSearchActive ? 'opacity-0' : 'text-white'}
+  `}
                     >
                         MINACIA
                     </h1>
+
+
                 </div>
             )}
 
@@ -85,11 +92,22 @@ const Navbar = () => {
                     >
 
                         {!isSearchActive ? (
-                            <a href="/">
-                                <div className={`text-4xl font-cormorant font-bold transition-all duration-700 ease-in-out ${isHomePage ? (isScrolled ? 'opacity-100 transform translate-y-0 scale-100' : 'opacity-0 transform translate-y-10 scale-75') : ''}`}>
+                            <a href="/" className="hidden sm:block">
+                                <div
+                                    className={`
+                                text-4xl font-cormorant font-bold 
+                                transition-all duration-700 ease-in-out
+                                ${isHomePage
+                                            ? isScrolled
+                                                ? 'opacity-100 translate-y-0 scale-100 blur-0 pointer-events-auto'
+                                                : 'opacity-0 translate-y-10 scale-75 blur-sm pointer-events-none'
+                                            : ''}
+                              `}
+                                >
                                     MINACIA
                                 </div>
                             </a>
+
 
                         ) : (
                             <div className="flex items-center justify-between w-full">

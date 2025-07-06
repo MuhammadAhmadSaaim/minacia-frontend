@@ -8,9 +8,29 @@ function Billing() {
     const BASE_URL = process.env.REACT_APP_BACKEND_URL
     const id = useSelector(state => state.token.id)
     const navigate = useNavigate();
-    const location = useLocation();
     const [error, setError] = useState();
-    const { totalItems, price } = location.state || {};
+    const cartItems = useSelector(state => state.cart.items);
+    const subtotal = cartItems.reduce((sum, item) => {
+        const price = parseFloat(item.price.replace('Rs', '').replace('£', '').trim());
+        return sum + price * item.quantity;
+    }, 0);
+    const [taxRate, setTaxRate] = useState(17); // Default to 17% if API fails
+    
+        useEffect(() => {
+            fetch(`${BASE_URL}/api/listing/additionalPays/`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.tax) setTaxRate(parseFloat(data.tax));
+                })
+                .catch(err => {
+                    console.error("Error fetching tax:", err);
+                });
+        }, [BASE_URL]);
+
+    const taxes = subtotal * (taxRate / 100);
+    const totalPrice = subtotal + taxes;
+    const price = totalPrice;
+    const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     const token = useSelector(state => state.token?.token?.access);
 
     const [formData, setFormData] = useState({

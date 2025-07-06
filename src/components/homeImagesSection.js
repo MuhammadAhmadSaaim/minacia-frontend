@@ -15,7 +15,12 @@ const HomeImagesSection = () => {
             description: 'Explore Women\'s Velvet Collection',
         },
         {
-            imageUrl: '/images/6.jpg',
+            imageUrl: '/images/frontpage_three.jpg',
+            title: 'Men',
+            description: 'Fall Winter 2024 - Men\'s Collection',
+        },
+        {
+            imageUrl: '/images/frontpage_four.jpg',
             title: 'Men',
             description: 'Fall Winter 2024 - Men\'s Collection',
         },
@@ -33,9 +38,9 @@ const HomeImagesSection = () => {
                 <BgImageCard imageUrl={cards[1].imageUrl} title={cards[1].title} description={cards[1].description} />
 
                 {/* Second Row */}
-                <div className="col-span-1 sm:col-span-2">
-                    <BgImageCard imageUrl={cards[2].imageUrl} title={cards[2].title} description={cards[2].description} />
-                </div>
+                
+                <BgImageCard imageUrl={cards[2].imageUrl} title={cards[2].title} description={cards[2].description} />
+                <BgImageCard imageUrl={cards[3].imageUrl} title={cards[3].title} description={cards[3].description} />
             </div>
         
             <button onClick={() => {navigate("/all-products")}} className="w-full lg:w-auto text-2xl bg-black text-white py-3 px-6 mt-8 mb-6 font-cormorant flex justify-center items-center mx-auto">

@@ -67,7 +67,7 @@ function Footer() {
                             </a>
                         </div>
                         <p className="mt-4 text-sm">
-                            We will have Instagram and TikTok and no writing.
+                            Follow Minacia.
                         </p>
 
                     </div>

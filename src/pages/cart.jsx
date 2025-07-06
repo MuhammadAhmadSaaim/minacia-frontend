@@ -18,7 +18,7 @@ const Cart = () => {
                 if (data.tax) setTaxRate(parseFloat(data.tax));
             })
             .catch(err => {
-                console.error("Error fetching tax/shipping:", err);
+                console.error("Error fetching tax:", err);
             });
     }, [BASE_URL]);
 
@@ -27,7 +27,7 @@ const Cart = () => {
     };
 
     const handleCheckout = () => {
-        navigate("/billing", { state: { price: totalPrice, totalItems: cartItems.length } });
+        navigate("/billing");
     };
 
     const subtotal = cartItems.reduce((sum, item) => {

@@ -200,7 +200,7 @@ function Billing() {
                 <div className="container px-6 py-12 mx-auto flex flex-col md:flex-row sm:flex-cols gap-4">
                     <div className="md:w-3/4">
                         <div className="bg-white rounded-lg shadow-md p-6 mb-4 h-full">
-                            <h2 className="text-3xl text-black mt-2 font-bold mb-4">Enter Information to Proceed</h2>
+                            <h2 className="text-3xl text-black mt-2 font-bold mb-4">Enter Billing Information to Proceed</h2>
                             <h3 className="mt-3">{error ? error.toString() : null}</h3>
                             <form onSubmit={e => e.preventDefault()}>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -273,6 +273,7 @@ function Billing() {
                                             >
                                                 <option value="" disabled>Select a country</option>
                                                 {shippingCountries.map((country) => (<option key={country.code} value={country.code}> {country.name} </option>))} </select> </label>
+                                    <p className='text-md py-3 mb-1 font-md text-gray-500'>Please select shipping country. Shipping price will be calculated upon checkout.</p>
                                     </div>
                                 </div>
                             </form>
@@ -297,13 +298,13 @@ function Billing() {
                             {!isFormValid ?
                                 <button
                                     className="w-full py-2 px-4 text-white rounded bg-gray-600"
-                                    disabled={!isFormValid}>Stripe</button>
+                                    disabled={!isFormValid}>CHECKOUT</button>
                                 :
                                 //<Payment amount={price} name={totalItems} saveInfo={saveInfo}/>
 
                                 <button className="w-full py-2 px-4 text-white rounded bg-purple-600" type="submit"
                                     onClick={stripePayment}>
-                                    STRIPE CHECKOUT
+                                    CHECKOUT
                                 </button>
 
                             }

@@ -13,18 +13,22 @@ const StripeSuccess = () => {
         return sum + price * item.quantity;
     }, 0);
     const id = useSelector(state => state.token.id)
+    const payload = cart.map(item => ({
+        variant_id: item.selectedColor.id,
+        quantity: item.quantity,
+      }));
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     useEffect(() => {
         const reduceQuantity = async () => {
             try {
-                await axios.post(`${BASE_URL}/api/listing/reduceQuantity/`, { cart }, {
+                await axios.post(`${BASE_URL}/api/listing/reduceQuantity/`, payload, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
+                      Authorization: `Bearer ${token}`,
+                      'Content-Type': 'application/json',
+                    },
+                  });
                 await axios.post(`${BASE_URL}/api/stripe/save-payment/`, {
                     user: id,
                     method: "stripe",

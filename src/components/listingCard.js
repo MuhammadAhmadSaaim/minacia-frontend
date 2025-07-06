@@ -4,19 +4,40 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../redux/cartSlice';
 
 
-const ListingCard = ({ id, name, price, image, imageHover, category }) => {
+const ListingCard = ({ id, name, price, image, imageHover, category, selectedColor }) => {
   const dispatch = useDispatch();
-  const products = useSelector(state => state.products.products);
   const [isHovered, setIsHovered] = useState(false);
-  
+
+  const cartItems = useSelector(state => state.cart.items);
+
+  const alreadyInCart = cartItems.find(
+    item => item.id === id && item.selectedColor?.id === selectedColor?.id
+  );
+  const qtyInCart = alreadyInCart?.quantity || 0;
+
+  // Remaining quantity available to add
+  const remainingStock = selectedColor?.quantity - qtyInCart;
+
+  // Disable if no remaining quantity
+  const isOutOfStock = remainingStock <= 0;
+
+
   const handleAddToCart = (event) => {
     event.stopPropagation();
-    const product = products.find(p => p.id === parseInt(id));
-    if (product) {
-      dispatch(addToCart({ product, quantity: 1 }));
-    }
+
+    if (isOutOfStock) return; // Don't proceed
+
+    const product = {
+      id,
+      name,
+      price,
+      category,
+      color_variants: [selectedColor]
+    };
+    dispatch(addToCart({ product, quantity: 1, selectedColor }));
   };
-  
+
+
   return (
     <div
       className="relative bg-white overflow-hidden group flex flex-col w-full max-w-xs mx-2 mb-4"
@@ -41,12 +62,15 @@ const ListingCard = ({ id, name, price, image, imageHover, category }) => {
 
       <button
         onClick={handleAddToCart}
-        className={`absolute bottom-0 left-0 w-full bg-black text-white py-2 text-center transition-transform duration-500 ease-in-out ${isHovered ? 'translate-y-0' : 'translate-y-full'
-          }`}
-
+        disabled={isOutOfStock}
+        className={`absolute bottom-0 left-0 w-full py-2 text-center transition-transform duration-500 ease-in-out
+    ${isHovered ? 'translate-y-0' : 'translate-y-full'}
+    ${isOutOfStock ? 'bg-gray-400 text-gray-200 cursor-not-allowed' : 'bg-black text-white'}
+  `}
       >
-        Add to Cart
+        {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
       </button>
+
     </div>
   );
 };

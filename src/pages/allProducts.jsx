@@ -78,6 +78,7 @@ const AllProducts = () => {
         image: imageUrl,
         imageHover: imageHoverUrl,
         category: product.category_name,
+        selectedColor: variant,
         key: `${product.id}-${variant.color_name}-${idx}`
       };
     }) || [];
@@ -168,6 +169,7 @@ const AllProducts = () => {
             image={variant.image}
             imageHover={variant.imageHover}
             category={variant.category}
+            selectedColor={variant.selectedColor}
           />
         ))}
       </div>

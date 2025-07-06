@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateQuantity, removeFromCart } from '../redux/cartSlice';
+import { updateQuantity, removeFromCart, syncCartQuantities } from '../redux/cartSlice';
 
 const Cart = () => {
     const cartItems = useSelector(state => state.cart.items);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const BASE_URL = process.env.REACT_APP_BACKEND_URL;
-
-    const [taxRate, setTaxRate] = useState(17); // Default to 17% if API fails
+    const [quantityErrors, setQuantityErrors] = useState({});
+    const [taxRate, setTaxRate] = useState(17); // Default tax
 
     useEffect(() => {
         fetch(`${BASE_URL}/api/listing/additionalPays/`)
@@ -21,12 +21,16 @@ const Cart = () => {
                 console.error("Error fetching tax:", err);
             });
     }, [BASE_URL]);
+    useEffect(() => {
+        dispatch(syncCartQuantities());
+    }, [dispatch]);
 
     const handleRemove = (id, colorId) => {
         dispatch(removeFromCart({ productId: id, selectedColorId: colorId }));
     };
 
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
+        await dispatch(syncCartQuantities());  
         navigate("/billing");
     };
 
@@ -43,6 +47,25 @@ const Cart = () => {
         return imagePath?.startsWith("http") ? imagePath : `${BASE_URL}${imagePath}`;
     };
 
+    const handleQuantityChange = (item, newQty) => {
+        const key = `${item.id}-${item.selectedColor?.id}`;
+        const maxQty = item.selectedColor?.quantity || 1;
+
+        if (newQty <= maxQty) {
+            dispatch(updateQuantity({
+                productId: item.id,
+                selectedColorId: item.selectedColor?.id,
+                quantity: newQty,
+            }));
+            setQuantityErrors(prev => ({ ...prev, [key]: '' }));
+        } else {
+            setQuantityErrors(prev => ({
+                ...prev,
+                [key]: `Only ${maxQty} in stock`,
+            }));
+        }
+    };
+
     return (
         <div className="cart-content mt-20">
             {/* Mobile View */}
@@ -50,43 +73,52 @@ const Cart = () => {
                 <section className="usr-products">
                     <div className="products-wrapper w-full">
                         <ul className="product-list m-0 p-0 list-none">
-                            {cartItems.map((item) => (
-                                <li key={`${item.id}-${item.selectedColor?.id || 'default'}`} className="item-summary px-6 pb-12 border-b">
-                                    <div className="item w-full mt-12 m-auto">
-                                        <div className="bg-black m-auto w-60 h-60">
-                                            <img src={getItemImage(item)} alt={item.name} className="w-full h-full object-cover" />
+                            {cartItems.map((item) => {
+                                const key = `${item.id}-${item.selectedColor?.id}`;
+                                const maxQty = item.selectedColor?.quantity || 1;
+                                return (
+                                    <li key={key} className="item-summary px-6 pb-12 border-b">
+                                        <div className="item w-full mt-12 m-auto">
+                                            <div className="bg-black m-auto w-60 h-60">
+                                                <img src={getItemImage(item)} alt={item.name} className="w-full h-full object-cover" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="text-center my-4 item w-full tracking-wide">
-                                        <div className="font-semibold">{item.name}</div>
-                                        <div className="font-light">Color: {item.selectedColor?.color_name || item.color}</div>
-                                        {item.size && <div className="font-light">Size: {item.size}</div>}
-                                        <div className="my-4 text-xl tracking-wider">£ {item.price}</div>
-                                    </div>
-                                    <div className="qty flex">
-                                        <select
-                                            value={item.quantity}
-                                            onChange={(e) => {
-                                                dispatch(updateQuantity({
-                                                    productId: item.id,
-                                                    selectedColorId: item.selectedColor?.id,
-                                                    quantity: parseInt(e.target.value),
-                                                }));
-                                            }}
-                                            className="border py-2 px-4 text-center"
-                                        >
-                                            {[...Array(10)].map((_, i) => (
-                                                <option key={i} value={i + 1}>QTY: {i + 1}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <div className="py-4 mt-2 text-sm font-semibold item-footer flex space-x-4 justify-center">
-                                        <button onClick={() => handleRemove(item.id, item.selectedColor?.id)} className="border-b">
-                                            DELETE
-                                        </button>
-                                    </div>
-                                </li>
-                            ))}
+                                        <div className="text-center my-4 item w-full tracking-wide">
+                                            <div className="font-semibold">{item.name}</div>
+                                            <div className="font-light">Color: {item.selectedColor?.color_name || item.color}</div>
+                                            {item.size && <div className="font-light">Size: {item.size}</div>}
+                                            <div className="my-4 text-xl tracking-wider">£ {item.price}</div>
+                                        </div>
+                                        <div className="qty flex flex-col items-center">
+                                            <select
+                                                value={item.quantity}
+                                                onChange={(e) => handleQuantityChange(item, parseInt(e.target.value))}
+                                                className="border py-2 px-4 text-center"
+                                            >
+                                                {[...Array(10)].map((_, i) => {
+                                                    const value = i + 1;
+                                                    return (
+                                                        <option key={value} value={value} disabled={value > maxQty}>
+                                                            QTY: {value}
+                                                        </option>
+                                                    );
+                                                })}
+                                            </select>
+                                            {quantityErrors[key] && (
+                                                <div className="text-red-500 text-xs mt-1">{quantityErrors[key]}</div>
+                                            )}
+                                            <div className="text-xs text-gray-500 mt-1">
+                                                Only {maxQty} in stock
+                                            </div>
+                                        </div>
+                                        <div className="py-4 mt-2 text-sm font-semibold item-footer flex space-x-4 justify-center">
+                                            <button onClick={() => handleRemove(item.id, item.selectedColor?.id)} className="border-b">
+                                                DELETE
+                                            </button>
+                                        </div>
+                                    </li>
+                                );
+                            })}
                         </ul>
 
                         <div className="order-summary w-full">
@@ -102,7 +134,6 @@ const Cart = () => {
                                         <span>Subtotal</span>
                                         <span>£ {subtotal.toFixed(2)}</span>
                                     </div>
-                                
                                     <div className="text-sm mb-4 font-semibold flex justify-between font-cormorant">
                                         <span>Estimated Tax</span>
                                         <span>£ {taxes.toFixed(2)}</span>
@@ -132,47 +163,56 @@ const Cart = () => {
                                 <div className="font-semibold">your selections</div>
                             </div>
                             <div className="mt-8 items">
-                                {cartItems.map((item) => (
-                                    <div key={`${item.id}-${item.selectedColor?.id || 'default'}`} className="product w-full flex items-center border-b-2">
-                                        <div className="prodimg max-w-28">
-                                            <img src={getItemImage(item)} alt={item.name} className="w-full" />
-                                        </div>
-                                        <div className="flex flex-col p-4 flex-1">
-                                            <div className="prod-info flex items-center justify-between">
-                                                <div className="title text-md w-1/2">{item.name}</div>
-                                                <div className="flex-col text-end">
-                                                    <div className="qty flex">
-                                                        <select
-                                                            value={item.quantity}
-                                                            onChange={(e) => {
-                                                                dispatch(updateQuantity({
-                                                                    productId: item.id,
-                                                                    selectedColorId: item.selectedColor?.id,
-                                                                    quantity: parseInt(e.target.value),
-                                                                }));
-                                                            }}
-                                                            className="border py-1 px-2 text-center"
-                                                        >
-                                                            {[...Array(10)].map((_, i) => (
-                                                                <option key={i} value={i + 1}>QTY: {i + 1}</option>
-                                                            ))}
-                                                        </select>
+                                {cartItems.map((item) => {
+                                    const key = `${item.id}-${item.selectedColor?.id}`;
+                                    const maxQty = item.selectedColor?.quantity || 1;
+                                    return (
+                                        <div key={key} className="product w-full flex items-center border-b-2">
+                                            <div className="prodimg max-w-28">
+                                                <img src={getItemImage(item)} alt={item.name} className="w-full" />
+                                            </div>
+                                            <div className="flex flex-col p-4 flex-1">
+                                                <div className="prod-info flex items-center justify-between">
+                                                    <div className="title text-md w-1/2">{item.name}</div>
+                                                    <div className="flex-col text-end">
+                                                        <div className="qty flex flex-col items-end">
+                                                            <select
+                                                                value={item.quantity}
+                                                                onChange={(e) => handleQuantityChange(item, parseInt(e.target.value))}
+                                                                className="border py-1 px-2 text-center"
+                                                            >
+                                                                {[...Array(10)].map((_, i) => {
+                                                                    const value = i + 1;
+                                                                    return (
+                                                                        <option key={value} value={value} disabled={value > maxQty}>
+                                                                            QTY: {value}
+                                                                        </option>
+                                                                    );
+                                                                })}
+                                                            </select>
+                                                            {quantityErrors[key] && (
+                                                                <div className="text-red-500 text-xs mt-1">{quantityErrors[key]}</div>
+                                                            )}
+                                                            <div className="text-xs text-gray-500 mt-1">
+                                                                Only {maxQty} in stock
+                                                            </div>
+                                                        </div>
+                                                        <div className="amount tracking-widest text-gray-600">£ {item.price}</div>
                                                     </div>
-                                                    <div className="amount tracking-widest text-gray-600">£ {item.price}</div>
+                                                </div>
+                                                <div className="ship-info">
+                                                    <div className="uppercase font-semibold">Available</div>
+                                                    <div className="text-sm">Enjoy your complementary delivery</div>
+                                                </div>
+                                                <div className="py-4 mt-2 text-sm font-semibold item-footer space-x-4">
+                                                    <button onClick={() => handleRemove(item.id, item.selectedColor?.id)} className="border-b">
+                                                        DELETE
+                                                    </button>
                                                 </div>
                                             </div>
-                                            <div className="ship-info">
-                                                <div className="uppercase font-semibold">Available</div>
-                                                <div className="text-sm">Enjoy your complementary delivery</div>
-                                            </div>
-                                            <div className="py-4 mt-2 text-sm font-semibold item-footer space-x-4">
-                                                <button onClick={() => handleRemove(item.id, item.selectedColor?.id)} className="border-b">
-                                                    DELETE
-                                                </button>
-                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </div>
 

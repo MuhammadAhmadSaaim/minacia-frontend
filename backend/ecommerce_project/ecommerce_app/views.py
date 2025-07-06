@@ -7,6 +7,9 @@ from .models import ColorVariant
 from rest_framework.response import Response
 from .serializers import SubscriberSerializer, CategorySerializer, ProductListingSerializer, QuantityUpdateSerializer, AdditionalPaysSerializer
 from django.db.models import Q
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import ColorVariant
 
 class AdditionalPaysView(APIView):
     def get(self, request):
@@ -75,3 +78,30 @@ class QuantityReduceView(APIView):
             variant.save()
 
         return Response({"message": "Quantities updated successfully."}, status=status.HTTP_200_OK)
+
+
+
+@api_view(['POST'])
+def validate_cart(request):
+    cart_items = request.data.get('items', [])
+
+    result = []
+    for item in cart_items:
+        try:
+            variant = ColorVariant.objects.get(
+                product__id=item['productId'],
+                id=item['selectedColorId']
+            )
+            result.append({
+                'productId': item['productId'],
+                'selectedColorId': item['selectedColorId'],
+                'currentStock': variant.quantity
+            })
+        except ColorVariant.DoesNotExist:
+            result.append({
+                'productId': item['productId'],
+                'selectedColorId': item['selectedColorId'],
+                'currentStock': 0
+            })
+    
+    return Response(result)

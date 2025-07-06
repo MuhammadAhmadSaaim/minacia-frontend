@@ -10,4 +10,5 @@ urlpatterns = [
     path('additionalPays/', AdditionalPaysView.as_view(), name='additional-pays'),
     path('reduceQuantity/', QuantityReduceView.as_view(), name='quantity-reduce'),
     path('subscribe/', SubscribeView.as_view(), name='subscribe'),
+    path('cartvalidate/', validate_cart),
 ]

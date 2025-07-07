@@ -23,7 +23,7 @@ const ProductListing = () => {
 
         setLoading(true); 
 
-        fetch(`${BASE_URL}/api/listing/productListing/${categoryId}/`, {
+        fetch(`/api/listing/productListing/${categoryId}/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

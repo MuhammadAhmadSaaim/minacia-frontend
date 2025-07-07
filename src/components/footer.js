@@ -36,7 +36,7 @@ function Footer() {
                         <div className="mt-3 lg:max-w-sm">
                             <p className="text-sm">
 
-                                At Minacia, we don’t follow trends we disrupt them. Wear the Minacia, own the moment, and embrace the menace in fashion.
+                            At Minacia, we don’t follow trends, we disrupt them. Wear the Minacia, own the moment and embrace the menace in fashion.
                             </p>
                         </div>
                     </div>

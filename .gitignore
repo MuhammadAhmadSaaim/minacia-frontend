@@ -3,7 +3,7 @@ venv/
 /.pnp
 .pnp.js
 backend/ecommerce_project/env/
-
+backend/ecommerce_project/db.sqlite3
 # testing
 /coverage
 

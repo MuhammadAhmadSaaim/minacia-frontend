@@ -8,7 +8,6 @@ backend/ecommerce_project/db.sqlite3
 /coverage
 
 # production
-/build
 
 
 

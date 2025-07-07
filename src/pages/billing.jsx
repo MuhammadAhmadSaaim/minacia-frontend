@@ -85,7 +85,7 @@ function Billing() {
     const [taxRate, setTaxRate] = useState(17); // Default to 17% if API fails
     
         useEffect(() => {
-            fetch(`${BASE_URL}/api/listing/additionalPays/`)
+            fetch(`/api/listing/additionalPays/`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.tax) setTaxRate(parseFloat(data.tax));

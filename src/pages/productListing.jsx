@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; 
+import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setProducts } from '../redux/productSlice';
 import ListingHeader from '../components/listingHeader';
@@ -14,108 +14,115 @@ const ProductListing = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 10;
     const { categoryId } = useParams();
-    const [categoryName, setCategoryName] = useState("Products"); 
+    const [categoryName, setCategoryName] = useState("Products");
 
+    // Utility function to normalize image URLs
+    const normalizeImageUrl = (img) => {
+        if (!img) return "https://via.placeholder.com/300x300.png?text=No+Image";
+        return img.startsWith("http") ? img : `${BASE_URL}${img}`;
+    };
 
     useEffect(() => {
         if (!categoryId) return;
-        
 
-        setLoading(true); 
-
-        fetch(`/api/listing/productListing/${categoryId}/`, {
+        setLoading(true);
+        fetch(`${BASE_URL}/api/listing/productListing/${categoryId}/`, {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
+            headers: { 'Content-Type': 'application/json' }
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
+            .then(res => {
+                if (!res.ok) throw new Error("Network error");
+                return res.json();
             })
             .then(data => {
                 setData(data);
                 dispatch(setProducts(data));
-                if (data.length > 0 && data[0].category_name) {
-                    setCategoryName(data[0].category_name); 
+                if (data.length > 0) {
+                    setCategoryName(data[0].category_name || "Products");
                 }
                 setLoading(false);
             })
-            .catch(error => {
-                setError(error);
+            .catch(err => {
+                setError(err);
                 setLoading(false);
             });
-    }, [dispatch, categoryId]); 
-    // Pagination logic
-    const indexOfLastProduct = currentPage * productsPerPage;
-    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = data.slice(indexOfFirstProduct, indexOfLastProduct);
-    const totalPages = Math.ceil(data.length / productsPerPage);
+    }, [dispatch, categoryId]);
 
-    const handlePreviousPage = () => {
-        if (currentPage > 1) setCurrentPage(currentPage - 1);
-    };
+    // Flatten all color variants for pagination
+    const allVariants = data.flatMap(product => {
+        return product.color_variants?.map((variant, idx) => {
+            const images = variant.images || [];
+            const imageUrl = normalizeImageUrl(images[0]?.image);
+            const imageHoverUrl = normalizeImageUrl(images[1]?.image) || imageUrl;
 
-    const handleNextPage = () => {
-        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-    };
+            return {
+                key: `${product.id}-${variant.color_name}-${idx}`,
+                id: product.id,
+                name: `${product.name} - ${variant.color_name}`,
+                price: product.price,
+                category: product.category_name,
+                image: imageUrl,
+                imageHover: imageHoverUrl,
+                selectedColor: variant
+            };
+        }) || [];
+    });
 
-    const handlePageClick = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
+    // Pagination
+    const indexOfLast = currentPage * productsPerPage;
+    const indexOfFirst = indexOfLast - productsPerPage;
+    const currentProducts = allVariants.slice(indexOfFirst, indexOfLast);
+    const totalPages = Math.ceil(allVariants.length / productsPerPage);
+
+    const handlePageClick = (page) => setCurrentPage(page);
+    const handlePrevious = () => setCurrentPage(p => Math.max(p - 1, 1));
+    const handleNext = () => setCurrentPage(p => Math.min(p + 1, totalPages));
 
     if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.message}</div>;
+    if (error) return <div className="text-red-500">Error: {error.message}</div>;
 
     return (
         <div>
             <ListingHeader title={categoryName} />
-            <div className="flex-wrap mx-auto mt-40 mb-24 flex justify-around px-10">
-                {currentProducts.map((product, index) => {
-                    const imageUrl = (product.images && product.images.length > 0)
-                        ? product.images[0].image
-                        : 'https://example.com/placeholder-image.jpg';
-                    const imageHoverUrl = (product.images && product.images.length > 1)
-                        ? product.images[1].image
-                        : imageUrl;
 
-                    return (
-                        <ListingCard
-                            key={index}
-                            id={product.id}
-                            name={product.name}
-                            price={product.price}
-                            image={imageUrl}
-                            imageHover={imageHoverUrl}
-                            category={product.category_name}
-                        />
-                    );
-                })}
+            <div className="flex-wrap mx-auto mt-40 mb-24 flex justify-around px-10">
+                {currentProducts.map(item => (
+                    <ListingCard
+                        key={item.key}
+                        id={item.id}
+                        name={item.name}
+                        price={item.price}
+                        image={item.image}
+                        imageHover={item.imageHover}
+                        category={item.category}
+                        selectedColor={item.selectedColor}
+                    />
+                ))}
             </div>
 
-            <div className="flex justify-center mb-8">
+            <div className="flex justify-center mb-8 space-x-2">
                 <button
-                    className={`px-4 py-2 uppercase font-cormorant ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "hover:underline"}`}
-                    onClick={handlePreviousPage}
+                    onClick={handlePrevious}
                     disabled={currentPage === 1}
+                    className="px-4 py-2 uppercase font-cormorant hover:underline disabled:opacity-50"
                 >
                     Previous
                 </button>
-                {[...Array(totalPages)].map((_, index) => (
+                {[...Array(totalPages)].map((_, i) => (
                     <button
-                        key={index}
-                        className={`px-4 py-2 uppercase font-cormorant text-2xl ${currentPage === index + 1 ? "text-black underline" : "text-gray-600 hover:underline"}`}
-                        onClick={() => handlePageClick(index + 1)}
+                        key={i}
+                        onClick={() => handlePageClick(i + 1)}
+                        className={`px-4 py-2 uppercase font-cormorant ${
+                            currentPage === i + 1 ? "font-bold underline" : "hover:underline"
+                        }`}
                     >
-                        {index + 1}
+                        {i + 1}
                     </button>
                 ))}
                 <button
-                    className={`px-4 py-2 uppercase font-cormorant ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "hover:underline"}`}
-                    onClick={handleNextPage}
+                    onClick={handleNext}
                     disabled={currentPage === totalPages}
+                    className="px-4 py-2 uppercase font-cormorant hover:underline disabled:opacity-50"
                 >
                     Next
                 </button>

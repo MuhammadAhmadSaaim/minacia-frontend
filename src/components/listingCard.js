@@ -55,7 +55,7 @@ const ListingCard = ({ id, name, price, image, imageHover, category, selectedCol
 
         <div className="px-2 mb-12"> {/* Adjusted margin-bottom to create space for the button */}
           <h2 className="text-lg font-semibold">{name}</h2>
-          <p className="text-gray-500">{price}£</p>
+          <p className="text-gray-500">£{price}</p>
           <p className="text-gray-400 text-sm">{category}</p>
         </div>
       </Link>

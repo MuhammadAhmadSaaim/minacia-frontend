@@ -9,7 +9,7 @@ class AdditionalPays(models.Model):
     Tax = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return self.Tax.__str__() + " " + self.Shipping.__str__()
+        return self.Tax.__str__()
 
 class ProductCategory(models.Model):
     id = models.AutoField(primary_key=True)

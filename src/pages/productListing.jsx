@@ -19,7 +19,8 @@ const ProductListing = () => {
     // Utility function to normalize image URLs
     const normalizeImageUrl = (img) => {
         if (!img) return "https://via.placeholder.com/300x300.png?text=No+Image";
-        console.log(BASE_URL);
+        console.log("Base url:",BASE_URL);
+        console.log("image:",img);
         return img.startsWith("http") ? img : `${BASE_URL}${img}`;
     };
 

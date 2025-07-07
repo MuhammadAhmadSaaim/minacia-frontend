@@ -9,7 +9,7 @@ const Cart = () => {
     const navigate = useNavigate();
     const BASE_URL = process.env.REACT_APP_BACKEND_URL;
     const [quantityErrors, setQuantityErrors] = useState({});
-    const [taxRate, setTaxRate] = useState(17); // Default tax
+    const [taxRate, setTaxRate] = useState(0); // Default tax
 
     useEffect(() => {
         fetch(`${BASE_URL}/api/listing/additionalPays/`)

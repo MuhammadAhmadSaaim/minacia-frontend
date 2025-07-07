@@ -8,7 +8,7 @@ const MenuDrawer = ({ isMenuOpen, handleMenuToggle }) => {
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://35.178.29.251:8000/api/listing/categories`)
+        axios.get(`/api/listing/categories`)
             .then(res => setCategories(res.data))
             .catch(err => console.error('Error fetching categories:', err));
     }, []);

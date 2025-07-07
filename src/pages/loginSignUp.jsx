@@ -20,7 +20,7 @@ const AuthForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(`/api/auth/login/`, {
+      const response = await axios.post(`${BASE_URL}/api/auth/login/`, {
         username,
         password,
       });
@@ -38,7 +38,7 @@ const AuthForm = () => {
   const handleSubmitSignUp = async (event) => {
     event.preventDefault();
     try {
-      await axios.post(`/api/auth/register/`, {
+      await axios.post(`${BASE_URL}/api/auth/register/`, {
         username,
         email,
         password,
@@ -206,12 +206,12 @@ const AuthForm = () => {
           <div className="absolute inset-0 bg-black opacity-65" />
           <div className="relative z-10 flex flex-col items-center justify-center px-4 text-center">
             <h1 className="text-3xl md:text-5xl font-bold">
-              {isSignUp ? 'Welcome Back!' : 'Halo, Minacia!'}
+              {isSignUp ? 'Welcome Back!' : 'Welcome!'}
             </h1>
             <p className="mt-2 md:mt-4 text-lg md:text-2xl">
               {isSignUp
                 ? 'To keep Connected SignUp to Minacia Society.'
-                : 'Enter your personal details and start your journey with Minacia society.'}
+                : 'Enter your details and become apart of the society.'}
             </p>
             <button
               onClick={toggleForm}

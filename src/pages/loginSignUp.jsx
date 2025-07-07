@@ -206,11 +206,11 @@ const AuthForm = () => {
           <div className="absolute inset-0 bg-black opacity-65" />
           <div className="relative z-10 flex flex-col items-center justify-center px-4 text-center">
             <h1 className="text-3xl md:text-5xl font-bold">
-              {isSignUp ? 'Welcome Back!' : 'Welcome!'}
+              {isSignUp ? 'Sign Up!' : 'Welcome!'}
             </h1>
             <p className="mt-2 md:mt-4 text-lg md:text-2xl">
               {isSignUp
-                ? 'To keep Connected SignUp to Minacia Society.'
+                ? 'Stay up to date with Minacia.'
                 : 'Enter your details and become apart of the society.'}
             </p>
             <button

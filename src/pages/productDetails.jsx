@@ -35,7 +35,7 @@ const ProductDetails = () => {
           }))
         };
 
-        const res = await axios.post(`${BASE_URL}/api/listing/cartvalidate/`, payload);
+        const res = await axios.post(`/api/listing/cartvalidate/`, payload);
         const updatedStock = {};
         res.data.forEach(item => {
           updatedStock[item.selectedColorId] = item.currentStock;

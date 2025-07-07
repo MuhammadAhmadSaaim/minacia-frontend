@@ -25,14 +25,14 @@ const StripeSuccess = () => {
   useEffect(() => {
     const reduceQuantity = async () => {
       try {
-        await axios.post(`${BASE_URL}/api/listing/reduceQuantity/`, payload, {
+        await axios.post(`/api/listing/reduceQuantity/`, payload, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         });
 
-        await axios.post(`${BASE_URL}/api/stripe/save-payment/`, {
+        await axios.post(`/api/stripe/save-payment/`, {
           user: id,
           method: 'stripe',
           amount: subtotal,

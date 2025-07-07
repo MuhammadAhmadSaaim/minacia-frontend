@@ -140,7 +140,7 @@ function Billing() {
         try {
             await saveInfo();
 
-            const resp = await axios.post(`${BASE_URL}/api/stripe/create-stripe-session/`, paymentInfo, {
+            const resp = await axios.post(`/api/stripe/create-stripe-session/`, paymentInfo, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ function Billing() {
 
     const saveInfo = async () => {
         try {
-            const check = await axios.get(`${BASE_URL}/api/stripe/check-billing-info/`, {
+            const check = await axios.get(`/api/stripe/check-billing-info/`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
@@ -177,7 +177,7 @@ function Billing() {
                     user: id
                 };
 
-                await axios.post(`${BASE_URL}/api/stripe/save-billing-info/`, billingInfo, {
+                await axios.post(`/api/stripe/save-billing-info/`, billingInfo, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',

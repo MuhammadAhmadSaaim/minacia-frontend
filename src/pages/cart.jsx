@@ -12,7 +12,7 @@ const Cart = () => {
     const [taxRate, setTaxRate] = useState(0); // Default tax
 
     useEffect(() => {
-        fetch(`${BASE_URL}/api/listing/additionalPays/`)
+        fetch(`/api/listing/additionalPays/`)
             .then(res => res.json())
             .then(data => {
                 if (data.tax) setTaxRate(parseFloat(data.tax));

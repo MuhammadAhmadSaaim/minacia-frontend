@@ -82,7 +82,7 @@ function Billing() {
         const price = parseFloat(item.price.replace('Rs', '').replace('£', '').trim());
         return sum + price * item.quantity;
     }, 0);
-    const [taxRate, setTaxRate] = useState(17); // Default to 17% if API fails
+    const [taxRate, setTaxRate] = useState(0); // Default to 17% if API fails
     
         useEffect(() => {
             fetch(`/api/listing/additionalPays/`)

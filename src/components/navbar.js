@@ -4,8 +4,7 @@ import { IoCloseOutline } from 'react-icons/io5';
 import MenuDrawer from './menuDrawer';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Toast from './Toast'; 
 
 
 const Navbar = () => {
@@ -13,6 +12,10 @@ const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const token = useSelector((state) => state.token.token);
+    const [toastVisible, setToastVisible] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+
+
 
 
     // Get the current location (URL)
@@ -139,15 +142,8 @@ const Navbar = () => {
                                 <div
                                     onClick={() => {
                                         if (token) {
-                                            toast.info('You are already logged in.', {
-                                                position: 'top-right',
-                                                autoClose: 2500,
-                                                hideProgressBar: false,
-                                                closeOnClick: true,
-                                                pauseOnHover: true,
-                                                draggable: true,
-                                                theme: 'light',
-                                            });
+                                            setToastMessage('You are already logged in.');
+                                            setToastVisible(true);
                                         } else {
                                             window.location.href = '/login';
                                         }
@@ -156,6 +152,7 @@ const Navbar = () => {
                                 >
                                     <FiUser size={20} />
                                 </div>
+
 
                                 <FiSearch size={20} className="cursor-pointer transition-all duration-500" onClick={handleSearchClick} />
                                 <button className="flex items-center space-x-1" onClick={handleMenuToggle}>
@@ -171,7 +168,8 @@ const Navbar = () => {
 
             {/* Menu Drawer */}
             <MenuDrawer isMenuOpen={isMenuOpen} handleMenuToggle={handleMenuToggle} />
-            <ToastContainer />
+            <Toast message={toastMessage} visible={toastVisible} setVisible={setToastVisible} />
+
         </div>
     );
 };

@@ -3,12 +3,17 @@ import { FiShoppingBag, FiUser, FiSearch, FiMenu } from 'react-icons/fi';
 import { IoCloseOutline } from 'react-icons/io5';
 import MenuDrawer from './menuDrawer';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Navbar = () => {
     const [isSearchActive, setIsSearchActive] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const token = useSelector((state) => state.token.token);
+
 
     // Get the current location (URL)
     const location = useLocation();
@@ -131,7 +136,27 @@ const Navbar = () => {
                         {!isSearchActive ? (
                             <div className="flex items-center space-x-4">
                                 <a href='/cart'><FiShoppingBag size={20} /></a>
-                                <a href='/login'><FiUser size={20} /></a>
+                                <div
+                                    onClick={() => {
+                                        if (token) {
+                                            toast.info('You are already logged in.', {
+                                                position: 'top-right',
+                                                autoClose: 2500,
+                                                hideProgressBar: false,
+                                                closeOnClick: true,
+                                                pauseOnHover: true,
+                                                draggable: true,
+                                                theme: 'light',
+                                            });
+                                        } else {
+                                            window.location.href = '/login';
+                                        }
+                                    }}
+                                    className="cursor-pointer"
+                                >
+                                    <FiUser size={20} />
+                                </div>
+
                                 <FiSearch size={20} className="cursor-pointer transition-all duration-500" onClick={handleSearchClick} />
                                 <button className="flex items-center space-x-1" onClick={handleMenuToggle}>
                                     <FiMenu size={20} />
@@ -146,6 +171,7 @@ const Navbar = () => {
 
             {/* Menu Drawer */}
             <MenuDrawer isMenuOpen={isMenuOpen} handleMenuToggle={handleMenuToggle} />
+            <ToastContainer />
         </div>
     );
 };

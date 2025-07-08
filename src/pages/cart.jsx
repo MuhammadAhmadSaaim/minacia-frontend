@@ -9,15 +9,16 @@ const Cart = () => {
     const navigate = useNavigate();
     const BASE_URL = process.env.REACT_APP_BACKEND_URL;
     const [quantityErrors, setQuantityErrors] = useState({});
-    const [taxRate, setTaxRate] = useState(0); // Default tax
+    const [taxRate, setTaxRate] = useState(6); // Default tax
 
     useEffect(() => {
-        fetch(`/api/listing/additionalPays/`)
+        fetch(`${BASE_URL}/api/listing/additionalPays/`)
             .then(res => res.json())
             .then(data => {
                 if (data.tax !== null && data.tax !== undefined) {
                     setTaxRate(parseFloat(data.tax));
                 }
+                
             })
             .catch(err => {
                 console.error("Error fetching tax:", err);
@@ -27,6 +28,14 @@ const Cart = () => {
         dispatch(syncCartQuantities());
     }, [dispatch]);
 
+    useEffect(() => {
+        window.onpageshow = function (event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        };
+    }, []);
+    
     const handleRemove = (id, colorId) => {
         dispatch(removeFromCart({ productId: id, selectedColorId: colorId }));
     };
@@ -40,7 +49,7 @@ const Cart = () => {
         const price = parseFloat(item.price.replace('Rs', '').replace('£', '').trim());
         return sum + price * item.quantity;
     }, 0);
-
+    
     const taxes = subtotal * (taxRate / 100);
     const totalPrice = subtotal + taxes;
 
@@ -109,9 +118,7 @@ const Cart = () => {
                                             {quantityErrors[key] && (
                                                 <div className="text-red-500 text-xs mt-1">{quantityErrors[key]}</div>
                                             )}
-                                            <div className="text-xs text-gray-500 mt-1">
-                                                Only {maxQty} in stock
-                                            </div>
+                                           
                                         </div>
                                         <div className="py-4 mt-2 text-sm font-semibold item-footer flex space-x-4 justify-center">
                                             <button onClick={() => handleRemove(item.id, item.selectedColor?.id)} className="border-b">
@@ -195,9 +202,6 @@ const Cart = () => {
                                                             {quantityErrors[key] && (
                                                                 <div className="text-red-500 text-xs mt-1">{quantityErrors[key]}</div>
                                                             )}
-                                                            <div className="text-xs text-gray-500 mt-1">
-                                                                Only {maxQty} in stock
-                                                            </div>
                                                         </div>
                                                         <div className="amount tracking-widest text-gray-600">£ {item.price}</div>
                                                     </div>

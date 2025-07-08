@@ -28,12 +28,22 @@ SECRET_KEY = 'django-insecure-c4%*9u0etckd0go%s5(#%^9ts2eo#0qc6_uj&!fktimc6z&shi
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://minaciasociety.com",
+    "https://www.minaciasociety.com",
+    "http://127.0.0.1",
+    "http://35.178.29.251"
+]
+
+CSRF_COOKIE_SECURE = True  # only for HTTPS
+
+
 BACKEND_ADDR = "http://localhost:8000/" # replace with real when in production
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['minaciasociety.com", "www.minaciasociety.com', 'localhost', '35.178.29.251']
 
 
 # Application definition
@@ -67,12 +77,15 @@ MIDDLEWARE = [
 
 
 ROOT_URLCONF = 'ecommerce_project.urls'
-# CORS_ALLOWED_ORIGINS = [
-#     "http://127.0.0.1:3000",
-#     "http://localhost:3000"
-# ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://minaciasociety.com",
+    "https://www.minaciasociety.com",
+    "http://127.0.0.1:3000",
+    "http://35.178.29.251"
+]
+
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

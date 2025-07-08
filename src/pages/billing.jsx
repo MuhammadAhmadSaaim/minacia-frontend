@@ -89,8 +89,9 @@ function Billing() {
                 .then(res => res.json())
                 .then(data => {
                     if (data.tax !== null && data.tax !== undefined) {
-                    setTaxRate(parseFloat(data.tax));
-                }
+                        setTaxRate(parseFloat(data.tax));
+                    }
+                    
                 })
                 .catch(err => {
                     console.error("Error fetching tax:", err);
@@ -111,13 +112,19 @@ function Billing() {
         country: ''
     });
     const [isFormValid, setIsFormValid] = useState(false);
+    useEffect(() => {
+        const savedData = localStorage.getItem("billingFormData");
+        if (savedData) {
+            setFormData(JSON.parse(savedData));
+        }
+    }, []);
 
     useEffect(() => {
         if (token == null) {
-            navigate("/login");
+            navigate("/login", { state: { from: "/billing" } });
         }
     }, [token]);
-
+    
     useEffect(() => {
         const { name, address, email, phone, country} = formData;
         setIsFormValid(name && address && email && phone && country);
@@ -141,6 +148,7 @@ function Billing() {
         };
         try {
             await saveInfo();
+            localStorage.setItem("billingFormData", JSON.stringify(formData));
 
             const resp = await axios.post(`/api/stripe/create-stripe-session/`, paymentInfo, {
                 headers: {
@@ -154,7 +162,7 @@ function Billing() {
         } catch (err) {
             console.error('Error making payment:', err);
             if (err.response?.status === 401) {
-                navigate("/login");
+                navigate("/login", { state: { from: "/billing" } });
             } else {
                 setError("Something went wrong while processing payment.");
             }
@@ -188,7 +196,7 @@ function Billing() {
             }
         } catch (err) {
             if (err.response?.status === 401) {
-                navigate("/login");
+                navigate("/login", { state: { from: "/billing" } });
             } else {
                 setError(err.response?.data?.detail || "Billing info failed to save.");
             }

@@ -15,7 +15,9 @@ const Cart = () => {
         fetch(`/api/listing/additionalPays/`)
             .then(res => res.json())
             .then(data => {
-                if (data.tax) setTaxRate(parseFloat(data.tax));
+                if (data.tax !== null && data.tax !== undefined) {
+                    setTaxRate(parseFloat(data.tax));
+                }
             })
             .catch(err => {
                 console.error("Error fetching tax:", err);

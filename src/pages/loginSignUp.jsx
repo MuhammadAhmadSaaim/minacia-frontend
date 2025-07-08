@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setToken, setId } from '../redux/jwtSlice';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 const AuthForm = () => {
-  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  const location = useLocation();
+
   const [isSignUp, setIsSignUp] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   // Login form states
@@ -24,6 +26,8 @@ const AuthForm = () => {
   const [loginSuccess, setLoginSuccess] = useState(null);
   const [signupError, setSignupError] = useState(null);
   const [signupSuccess, setSignupSuccess] = useState(null);
+  const redirectTo = location.state?.from || "/";
+  console.log("Redirecting to:", redirectTo);
 
   // Clear login messages after 3 seconds
   React.useEffect(() => {
@@ -60,7 +64,8 @@ const AuthForm = () => {
       setLoginSuccess('Login successfully');
       setSignupUsername('');
       setLoginError(null);
-      navigate('/');
+      navigate(redirectTo);
+
     } catch (err) {
       setLoginError('Invalid username or password');
       setLoginSuccess(null);
@@ -69,7 +74,7 @@ const AuthForm = () => {
 
     }
   };
-  
+
 
   const handleSubmitSignUp = async (event) => {
     event.preventDefault();
@@ -83,7 +88,7 @@ const AuthForm = () => {
       setSignupError(null);
       setSignupEmail('');
       setSignupPassword('');
-      toggleForm(); 
+      toggleForm();
     } catch (err) {
       if (err.response?.data?.username) {
         setSignupError('Username already exists');
@@ -95,7 +100,7 @@ const AuthForm = () => {
       setSignupSuccess(null);
     }
   };
-  
+
 
   const toggleForm = () => {
     setIsSignUp(!isSignUp);

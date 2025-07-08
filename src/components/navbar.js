@@ -97,7 +97,7 @@ const Navbar = () => {
                     >
 
                         {!isSearchActive ? (
-                            <a href="/" className="hidden sm:block">
+                            <a href="/all-products" className="hidden sm:block">
                                 <div
                                     className={`
                                 text-4xl font-cormorant font-bold 

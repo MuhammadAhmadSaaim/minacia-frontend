@@ -31,7 +31,7 @@ const AuthForm = () => {
       const timer = setTimeout(() => {
         setLoginSuccess(null);
         setLoginError(null);
-      }, 3000);
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [loginSuccess, loginError]);
@@ -42,7 +42,7 @@ const AuthForm = () => {
       const timer = setTimeout(() => {
         setSignupSuccess(null);
         setSignupError(null);
-      }, 3000);
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [signupSuccess, signupError]);
@@ -51,13 +51,14 @@ const AuthForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(`${BASE_URL}/api/auth/login/`, {
+      const response = await axios.post(`/api/auth/login/`, {
         username: loginUsername,
         password: loginPassword,
       });
       dispatch(setToken(response.data));
       dispatch(setId(response.data.id));
       setLoginSuccess('Login successfully');
+      setSignupUsername('');
       setLoginError(null);
       navigate('/');
     } catch (err) {
@@ -73,16 +74,16 @@ const AuthForm = () => {
   const handleSubmitSignUp = async (event) => {
     event.preventDefault();
     try {
-      await axios.post(`${BASE_URL}/api/auth/register/`, {
+      await axios.post(`/api/auth/register/`, {
         username: signupUsername,
         email: signupEmail,
         password: signupPassword,
       });
       setSignupSuccess('Registration successful!');
       setSignupError(null);
-      setSignupUsername('');
       setSignupEmail('');
       setSignupPassword('');
+      toggleForm(); 
     } catch (err) {
       if (err.response?.data?.username) {
         setSignupError('Username already exists');
@@ -251,7 +252,7 @@ const AuthForm = () => {
           <div className="absolute inset-0 bg-black opacity-65" />
           <div className="relative z-10 flex flex-col items-center justify-center px-4 text-center">
             <h1 className="text-3xl md:text-5xl font-bold">
-              {isSignUp ? 'Sign Up!' : 'Welcome!'}
+              {isSignUp ? 'Sign Up!' : `Welcome ${signupUsername}!`}
             </h1>
             <p className="mt-2 md:mt-4 text-lg md:text-2xl">
               {isSignUp

@@ -43,8 +43,7 @@ BACKEND_ADDR = "http://localhost:8000/" # replace with real when in production
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['minaciasociety.com", "www.minaciasociety.com', 'localhost', '35.178.29.251']
-
+ALLOWED_HOSTS = ['minaciasociety.com', 'www.minaciasociety.com', 'localhost', '35.178.29.251']
 
 # Application definition
 

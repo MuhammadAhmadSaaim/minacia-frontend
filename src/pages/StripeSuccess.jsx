@@ -21,6 +21,9 @@ const StripeSuccess = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(true);
+  useEffect(() => {
+  localStorage.removeItem("billingFormData");
+}, []);
 
   useEffect(() => {
     const reduceQuantity = async () => {

@@ -3,12 +3,21 @@ import { FiShoppingBag, FiUser, FiSearch, FiMenu } from 'react-icons/fi';
 import { IoCloseOutline } from 'react-icons/io5';
 import MenuDrawer from './menuDrawer';
 import { useLocation } from 'react-router-dom';
-
-
+import { useSelector } from 'react-redux';
+import Toast from './Toast';
+import { isTokenValid } from './auth';
 const Navbar = () => {
     const [isSearchActive, setIsSearchActive] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
+    const rawToken = useSelector(state => state.token?.token?.access);
+    const token = isTokenValid(rawToken) ? rawToken : null;
+
+    const [toastVisible, setToastVisible] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+
+
+
 
     // Get the current location (URL)
     const location = useLocation();
@@ -82,8 +91,8 @@ const Navbar = () => {
                     <div
                         className={`flex items-center space-x-2 ${isSearchActive ? 'opacity-0' : 'opacity-100'}`}
                     >
-                        <a href="/contact-us" className="flex items-center text-sm font-semibold">
-                            <span className="mr-1">+</span> Contact Us
+                        <a href="/" className="flex items-center text-sm font-semibold">
+                            Home
                         </a>
                     </div>
                     {/* Center Section or Search Bar */}
@@ -92,7 +101,7 @@ const Navbar = () => {
                     >
 
                         {!isSearchActive ? (
-                            <a href="/" className="hidden sm:block">
+                            <a href="/all-products" className="hidden sm:block">
                                 <div
                                     className={`
                                 text-4xl font-cormorant font-bold 
@@ -131,7 +140,21 @@ const Navbar = () => {
                         {!isSearchActive ? (
                             <div className="flex items-center space-x-4">
                                 <a href='/cart'><FiShoppingBag size={20} /></a>
-                                <a href='/login'><FiUser size={20} /></a>
+                                <div
+                                    onClick={() => {
+                                        if (token) {
+                                            setToastMessage('You are already logged in.');
+                                            setToastVisible(true);
+                                        } else {
+                                            window.location.href = '/login';
+                                        }
+                                    }}
+                                    className="cursor-pointer"
+                                >
+                                    <FiUser size={20} />
+                                </div>
+
+
                                 <FiSearch size={20} className="cursor-pointer transition-all duration-500" onClick={handleSearchClick} />
                                 <button className="flex items-center space-x-1" onClick={handleMenuToggle}>
                                     <FiMenu size={20} />
@@ -146,6 +169,8 @@ const Navbar = () => {
 
             {/* Menu Drawer */}
             <MenuDrawer isMenuOpen={isMenuOpen} handleMenuToggle={handleMenuToggle} />
+            <Toast message={toastMessage} visible={toastVisible} setVisible={setToastVisible} />
+
         </div>
     );
 };

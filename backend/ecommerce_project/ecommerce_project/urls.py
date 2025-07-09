@@ -18,10 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from . import settings
-from ecommerce_app.admin import admin_site
+
 
 urlpatterns = [
-    path('admin/', admin_site.urls),
+    
+    path('admin/', admin.site.urls),
     path('nested_admin/', include('nested_admin.urls')),
     path('api/auth/', include('my_auth.urls')),
     path('api/listing/', include('ecommerce_app.urls')),

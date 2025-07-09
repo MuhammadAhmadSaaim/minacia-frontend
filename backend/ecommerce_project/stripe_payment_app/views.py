@@ -161,7 +161,7 @@ class CreateStripeCheckoutSession(APIView):
                 }
             )
             print("sending to stripe")
-#            print(checkout_session.url)
+            print(checkout_session.url)
             return Response({'url': checkout_session.url})
         except Exception as e:
             return Response({'error': str(e)}, status=400)

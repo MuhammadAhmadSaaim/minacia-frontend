@@ -4,54 +4,104 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setToken, setId } from '../redux/jwtSlice';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 const AuthForm = () => {
   const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  const location = useLocation();
+
   const [isSignUp, setIsSignUp] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
+  // Login form states
+  const [loginUsername, setLoginUsername] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+
+  // Signup form states
+  const [signupUsername, setSignupUsername] = useState('');
+  const [signupEmail, setSignupEmail] = useState('');
+  const [signupPassword, setSignupPassword] = useState('');
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const [loginError, setLoginError] = useState(null);
+  const [loginSuccess, setLoginSuccess] = useState(null);
+  const [signupError, setSignupError] = useState(null);
+  const [signupSuccess, setSignupSuccess] = useState(null);
+  const redirectTo = location.state?.from || "/";
+  console.log("Redirecting to:", redirectTo);
+
+  // Clear login messages after 3 seconds
+  React.useEffect(() => {
+    if (loginSuccess || loginError) {
+      const timer = setTimeout(() => {
+        setLoginSuccess(null);
+        setLoginError(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [loginSuccess, loginError]);
+
+  // Clear signup messages after 3 seconds
+  React.useEffect(() => {
+    if (signupSuccess || signupError) {
+      const timer = setTimeout(() => {
+        setSignupSuccess(null);
+        setSignupError(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [signupSuccess, signupError]);
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await axios.post(`${BASE_URL}/api/auth/login/`, {
-        username,
-        password,
+        username: loginUsername,
+        password: loginPassword,
       });
       dispatch(setToken(response.data));
       dispatch(setId(response.data.id));
-      setSuccess('Login successfully');
-      setError(null);
-      navigate('/');
+      setLoginSuccess('Login successfully');
+      setSignupUsername('');
+      setLoginError(null);
+      navigate(redirectTo);
+
     } catch (err) {
-      setError('Invalid Email or Password');
-      setSuccess(null);
+      setLoginError('Invalid username or password');
+      setLoginSuccess(null);
+      setLoginUsername('');
+      setLoginPassword('');
+
     }
   };
+
 
   const handleSubmitSignUp = async (event) => {
     event.preventDefault();
     try {
       await axios.post(`${BASE_URL}/api/auth/register/`, {
-        username,
-        email,
-        password,
+        username: signupUsername,
+        email: signupEmail,
+        password: signupPassword,
       });
-      setSuccess('Registration successful!');
-      setUsername('');
-      setEmail('');
-      setPassword('');
-      navigate('/login');
+      setSignupSuccess('Registration successful!');
+      setSignupError(null);
+      setSignupEmail('');
+      setSignupPassword('');
+      toggleForm();
     } catch (err) {
-      setError('Registration failed. Please try again.');
+      if (err.response?.data?.username) {
+        setSignupError('Username already exists');
+      } else if (err.response?.data?.email) {
+        setSignupError('Email already exists');
+      } else {
+        setSignupError('Registration failed. Please try again.');
+      }
+      setSignupSuccess(null);
     }
   };
+
 
   const toggleForm = () => {
     setIsSignUp(!isSignUp);
@@ -71,16 +121,17 @@ const AuthForm = () => {
               } z-10`}
           >
             <form onSubmit={handleSubmit} className="w-full px-4">
-              {error && !isSignUp && (
+              {loginError && (
                 <div className="mb-2 bg-red-100 text-red-700 px-4 py-2 rounded text-center">
-                  {error}
+                  {loginError}
                 </div>
               )}
-              {success && !isSignUp && (
+              {loginSuccess && (
                 <div className="mb-2 bg-green-100 text-green-700 px-4 py-2 rounded text-center">
-                  {success}
+                  {loginSuccess}
                 </div>
               )}
+
               <h1 className="text-4xl md:text-6xl font-bold text-center">Login</h1>
               <div className="relative mt-4">
                 <UserIcon className="absolute top-10 left-3 text-gray-500 h-5 w-5" />
@@ -89,8 +140,8 @@ const AuthForm = () => {
                   className="text-gray-700 border border-purple-200 py-2 pl-10 w-full"
                   type="text"
                   placeholder="Username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  value={loginUsername}
+                  onChange={(e) => setLoginUsername(e.target.value)}
                   required
                 />
               </div>
@@ -103,8 +154,8 @@ const AuthForm = () => {
                   className="text-gray-700 border border-purple-200 py-2 pl-10 pr-10 w-full"
                   type={isPasswordVisible ? 'text' : 'password'}
                   placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
                   required
                 />
                 <button
@@ -129,16 +180,17 @@ const AuthForm = () => {
               } z-10`}
           >
             <form onSubmit={handleSubmitSignUp} className="w-full px-4">
-              {error && !isSignUp && (
+              {signupError && (
                 <div className="mb-2 bg-red-100 text-red-700 px-4 py-2 rounded text-center">
-                  {error}
+                  {signupError}
                 </div>
               )}
-              {success && !isSignUp && (
+              {signupSuccess && (
                 <div className="mb-2 bg-green-100 text-green-700 px-4 py-2 rounded text-center">
-                  {success}
+                  {signupSuccess}
                 </div>
               )}
+
               <h1 className="text-4xl md:text-6xl font-bold text-center">SignUp</h1>
               <div className="relative mt-4">
                 <UserIcon className="absolute top-10 left-3 text-gray-500 h-5 w-5" />
@@ -147,8 +199,8 @@ const AuthForm = () => {
                   className="text-gray-700 border border-purple-200 py-2 pl-10 w-full"
                   type="text"
                   placeholder="Username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  value={signupUsername}
+                  onChange={(e) => setSignupUsername(e.target.value)}
                   required
                 />
               </div>
@@ -159,8 +211,8 @@ const AuthForm = () => {
                   className="text-gray-700 border border-purple-200 py-2 pl-10 w-full"
                   type="email"
                   placeholder="mail@gmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={signupEmail}
+                  onChange={(e) => setSignupEmail(e.target.value)}
                   required
                 />
               </div>
@@ -173,8 +225,8 @@ const AuthForm = () => {
                   className="text-gray-700 border border-purple-200 py-2 pl-10 pr-10 w-full"
                   type={isPasswordVisible ? 'text' : 'password'}
                   placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={signupPassword}
+                  onChange={(e) => setSignupPassword(e.target.value)}
                   required
                 />
                 <button
@@ -206,12 +258,12 @@ const AuthForm = () => {
           <div className="absolute inset-0 bg-black opacity-65" />
           <div className="relative z-10 flex flex-col items-center justify-center px-4 text-center">
             <h1 className="text-3xl md:text-5xl font-bold">
-              {isSignUp ? 'Welcome Back!' : 'Halo, Minacia!'}
+              {isSignUp ? 'Sign Up!' : `Welcome ${signupUsername}!`}
             </h1>
             <p className="mt-2 md:mt-4 text-lg md:text-2xl">
               {isSignUp
-                ? 'To keep Connected SignUp to Minacia Society.'
-                : 'Enter your personal details and start your journey with Minacia society.'}
+                ? 'Stay up to date with Minacia.'
+                : 'Enter your details and become apart of the society.'}
             </p>
             <button
               onClick={toggleForm}

@@ -5,11 +5,12 @@ from .models import *
 from rest_framework.views import APIView
 from .models import ColorVariant
 from rest_framework.response import Response
-from .serializers import SubscriberSerializer, CategorySerializer, ProductListingSerializer, QuantityUpdateSerializer, AdditionalPaysSerializer
+from .serializers import SubscriberSerializer, CategorySerializer, ProductListingSerializer, QuantityUpdateSerializer, OrderCreateSerializer
 from django.db.models import Q
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import ColorVariant
+from rest_framework import status, permissions
 
 class AdditionalPaysView(APIView):
     def get(self, request):
@@ -105,3 +106,13 @@ def validate_cart(request):
             })
     
     return Response(result)
+
+class CreateOrderAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        serializer = OrderCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            order = serializer.save()
+            return Response({"order_no": order.order_no}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

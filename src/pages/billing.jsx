@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { isTokenValid } from '../components/auth';
 import axios from 'axios';
+import Toast from '../components/Toast';
 
 const shippingCountries = [
     { code: "GB", name: "United Kingdom" },
@@ -82,25 +84,37 @@ function Billing() {
         const price = parseFloat(item.price.replace('Rs', '').replace('£', '').trim());
         return sum + price * item.quantity;
     }, 0);
-    const [taxRate, setTaxRate] = useState(17); // Default to 17% if API fails
-    
-        useEffect(() => {
-            fetch(`${BASE_URL}/api/listing/additionalPays/`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.tax) setTaxRate(parseFloat(data.tax));
-                })
-                .catch(err => {
-                    console.error("Error fetching tax:", err);
-                });
-        }, [BASE_URL]);
+    const [taxRate, setTaxRate] = useState(0); // Default to 17% if API fails
+
+    const [toastMessage, setToastMessage] = useState('');
+    const [toastVisible, setToastVisible] = useState(false);
+
+    const Showtoast = () => {
+        setToastMessage("Please fill out the billing form to proceed.");
+        setToastVisible(true);
+    }
+
+    useEffect(() => {
+        fetch(`${BASE_URL}/api/listing/additionalPays/`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.tax !== null && data.tax !== undefined) {
+                    setTaxRate(parseFloat(data.tax));
+                    localStorage.setItem("taxRate", parseFloat(data.tax));
+                }
+
+            })
+            .catch(err => {
+                console.error("Error fetching tax:", err);
+            });
+    }, [BASE_URL]);
 
     const taxes = subtotal * (taxRate / 100);
     const totalPrice = subtotal + taxes;
     const price = totalPrice;
     const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-    const token = useSelector(state => state.token?.token?.access);
-
+    const rawToken = useSelector(state => state.token?.token?.access);
+    const token = isTokenValid(rawToken) ? rawToken : null;
     const [formData, setFormData] = useState({
         name: '',
         address: '',
@@ -109,15 +123,22 @@ function Billing() {
         country: ''
     });
     const [isFormValid, setIsFormValid] = useState(false);
+    useEffect(() => {
+        const savedData = localStorage.getItem("billingFormData");
+        if (savedData) {
+            setFormData(JSON.parse(savedData));
+        }
+    }, []);
 
     useEffect(() => {
-        if (token == null) {
-            navigate("/login");
+        if (!token) {
+            navigate("/login", { state: { from: "/billing" } });
         }
     }, [token]);
 
+
     useEffect(() => {
-        const { name, address, email, phone, country} = formData;
+        const { name, address, email, phone, country } = formData;
         setIsFormValid(name && address && email && phone && country);
     }, [formData]);
 
@@ -139,10 +160,11 @@ function Billing() {
         };
         try {
             await saveInfo();
+            localStorage.setItem("billingFormData", JSON.stringify(formData));
 
             const resp = await axios.post(`${BASE_URL}/api/stripe/create-stripe-session/`, paymentInfo, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${rawToken}`,
                     'Content-Type': 'application/json',
                 }
             });
@@ -152,7 +174,7 @@ function Billing() {
         } catch (err) {
             console.error('Error making payment:', err);
             if (err.response?.status === 401) {
-                navigate("/login");
+                navigate("/login", { state: { from: "/billing" } });
             } else {
                 setError("Something went wrong while processing payment.");
             }
@@ -162,34 +184,26 @@ function Billing() {
 
     const saveInfo = async () => {
         try {
-            const check = await axios.get(`${BASE_URL}/api/stripe/check-billing-info/`, {
+
+            const billingInfo = {
+                name: formData.name,
+                address: formData.address,
+                email: formData.email,
+                phone: formData.phone,
+                user: id
+            };
+
+            const res = await axios.post(`${BASE_URL}/api/stripe/save-billing-info/`, billingInfo, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    'Authorization': `Bearer ${rawToken}`,
+                    'Content-Type': 'application/json',
                 }
             });
 
-            if (!check.data.exists) {
-                const billingInfo = {
-                    name: formData.name,
-                    address: formData.address,
-                    email: formData.email,
-                    phone: formData.phone,
-                    user: id
-                };
+            localStorage.setItem("billingInfoId", res.data.id);
 
-                await axios.post(`${BASE_URL}/api/stripe/save-billing-info/`, billingInfo, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    }
-                });
-            }
         } catch (err) {
-            if (err.response?.status === 401) {
-                navigate("/login");
-            } else {
-                setError(err.response?.data?.detail || "Billing info failed to save.");
-            }
+            setError(err.response?.data?.detail || "Billing info failed to save.");
         }
     };
 
@@ -273,7 +287,7 @@ function Billing() {
                                             >
                                                 <option value="" disabled>Select a country</option>
                                                 {shippingCountries.map((country) => (<option key={country.code} value={country.code}> {country.name} </option>))} </select> </label>
-                                    <p className='text-md py-3 mb-1 font-md text-gray-500'>Please select shipping country. Shipping price will be calculated upon checkout.</p>
+                                        <p className='text-md py-3 mb-1 font-md text-gray-500'>Please select shipping country. Shipping price will be calculated upon checkout.</p>
                                     </div>
                                 </div>
                             </form>
@@ -297,12 +311,12 @@ function Billing() {
                             </div>
                             {!isFormValid ?
                                 <button
-                                    className="w-full py-2 px-4 text-white rounded bg-gray-600"
-                                    disabled={!isFormValid}>CHECKOUT</button>
+                                    className="w-full py-2 px-4 text-white opacity-70 bg-gray-800"
+                                    onClick={Showtoast}>CHECKOUT</button>
                                 :
                                 //<Payment amount={price} name={totalItems} saveInfo={saveInfo}/>
 
-                                <button className="w-full py-2 px-4 text-white rounded bg-purple-600" type="submit"
+                                <button className="w-full py-2 px-4 text-white  bg-purple-600" type="submit"
                                     onClick={stripePayment}>
                                     CHECKOUT
                                 </button>
@@ -312,6 +326,11 @@ function Billing() {
                     </div>
                 </div>
             </div>
+            <Toast
+                message={toastMessage}
+                visible={toastVisible}
+                setVisible={setToastVisible}
+            />
         </div>
     );
 }

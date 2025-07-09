@@ -2,20 +2,26 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateQuantity, removeFromCart, syncCartQuantities } from '../redux/cartSlice';
-
+import Toast from '../components/Toast';
 const Cart = () => {
     const cartItems = useSelector(state => state.cart.items);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const BASE_URL = process.env.REACT_APP_BACKEND_URL;
     const [quantityErrors, setQuantityErrors] = useState({});
-    const [taxRate, setTaxRate] = useState(17); // Default tax
+    const [taxRate, setTaxRate] = useState(6); // Default tax
+    const [toastVisible, setToastVisible] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+
 
     useEffect(() => {
         fetch(`${BASE_URL}/api/listing/additionalPays/`)
             .then(res => res.json())
             .then(data => {
-                if (data.tax) setTaxRate(parseFloat(data.tax));
+                if (data.tax !== null && data.tax !== undefined) {
+                    setTaxRate(parseFloat(data.tax));
+                }
+
             })
             .catch(err => {
                 console.error("Error fetching tax:", err);
@@ -25,12 +31,20 @@ const Cart = () => {
         dispatch(syncCartQuantities());
     }, [dispatch]);
 
+    useEffect(() => {
+        window.onpageshow = function (event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        };
+    }, []);
+
     const handleRemove = (id, colorId) => {
         dispatch(removeFromCart({ productId: id, selectedColorId: colorId }));
     };
 
     const handleCheckout = async () => {
-        await dispatch(syncCartQuantities());  
+        await dispatch(syncCartQuantities());
         navigate("/billing");
     };
 
@@ -107,9 +121,7 @@ const Cart = () => {
                                             {quantityErrors[key] && (
                                                 <div className="text-red-500 text-xs mt-1">{quantityErrors[key]}</div>
                                             )}
-                                            <div className="text-xs text-gray-500 mt-1">
-                                                Only {maxQty} in stock
-                                            </div>
+
                                         </div>
                                         <div className="py-4 mt-2 text-sm font-semibold item-footer flex space-x-4 justify-center">
                                             <button onClick={() => handleRemove(item.id, item.selectedColor?.id)} className="border-b">
@@ -193,16 +205,15 @@ const Cart = () => {
                                                             {quantityErrors[key] && (
                                                                 <div className="text-red-500 text-xs mt-1">{quantityErrors[key]}</div>
                                                             )}
-                                                            <div className="text-xs text-gray-500 mt-1">
-                                                                Only {maxQty} in stock
-                                                            </div>
                                                         </div>
                                                         <div className="amount tracking-widest text-gray-600">£ {item.price}</div>
                                                     </div>
                                                 </div>
                                                 <div className="ship-info">
                                                     <div className="uppercase font-semibold">Available</div>
-                                                    <div className="text-sm">Enjoy your complementary delivery</div>
+                                                    <div className="text-sm capitalize text-gray-700">
+                                                        Color: {item.selectedColor?.color_name || 'N/A'}
+                                                    </div>
                                                 </div>
                                                 <div className="py-4 mt-2 text-sm font-semibold item-footer space-x-4">
                                                     <button onClick={() => handleRemove(item.id, item.selectedColor?.id)} className="border-b">
@@ -239,7 +250,18 @@ const Cart = () => {
                                     </div>
                                 </div>
                                 <div className="w-full mt-6">
-                                    <button onClick={handleCheckout} className="bg-black text-white py-4 px-6 w-full tracking-widest text-xs font-semibold">
+                                    <button
+                                        onClick={() => {
+                                            if (cartItems.length === 0) {
+                                                setToastMessage("Your cart is empty.");
+                                                setToastVisible(true);
+                                                return;
+                                            }
+                                            handleCheckout(); // only runs if cart is not empty
+                                        }}
+                                        className={`bg-black text-white py-4 px-6 w-full tracking-widest text-xs font-semibold 
+              ${cartItems.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    >
                                         CHECKOUT
                                     </button>
                                 </div>
@@ -248,6 +270,11 @@ const Cart = () => {
                     </div>
                 </div>
             </div>
+            <Toast
+                message={toastMessage}
+                visible={toastVisible}
+                setVisible={setToastVisible}
+            />
         </div>
     );
 };

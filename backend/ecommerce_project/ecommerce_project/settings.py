@@ -28,17 +28,31 @@ SECRET_KEY = 'django-insecure-c4%*9u0etckd0go%s5(#%^9ts2eo#0qc6_uj&!fktimc6z&shi
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY')
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://minaciasociety.com",
+    "https://www.minaciasociety.com",
+    "http://localhost",
+    "http://127.0.0.1",
+    "http://35.178.29.251"
+]
+
+CSRF_COOKIE_SECURE = True  # only for HTTPS
+
+
 BACKEND_ADDR = "http://localhost:8000/" # replace with real when in production
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['minaciasociety.com', 'www.minaciasociety.com', 'localhost', '35.178.29.251']
+
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
+    'nested_admin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,7 +64,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'my_auth',
     'ecommerce_app',
-    'nested_admin',
     'stripe_payment_app',
 ]
 
@@ -64,26 +77,75 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": True,
+    "brand_small_text": False,
+    "brand_colour": "navbar-orange",
+    "accent": "accent-orange",
+    "navbar": "navbar-orange navbar-light",
+    "no_navbar_border": True,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-light-orange",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "minty",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    }
+}
 
+JAZZMIN_SETTINGS = {
+    "related_modal_active": False,
+    "navigation_expanded": True,
+    "show_sidebar": True,
+    "custom_css": None,
+    "custom_js": None,
+    "site_title": "Minacia Admin",
+    "site_header": "Minacia Administrator",
+    "site_brand": "Minacia Admin",
+    "welcome_sign": "Welcome to Minacia Admin", 
+    "site_logo": None,               
+    "site_icon": False,               
+    "show_sidebar_user": False, 
+    "show_ui_builder": True,
+    
+}
 
 ROOT_URLCONF = 'ecommerce_project.urls'
-# CORS_ALLOWED_ORIGINS = [
-#     "http://127.0.0.1:3000",
-#     "http://localhost:3000"
-# ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://minaciasociety.com",
+    "https://www.minaciasociety.com",
+    "http://127.0.0.1:3000",
+    "http://localhost:3000"
+]
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
-
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
+
 
 TEMPLATES = [
     {

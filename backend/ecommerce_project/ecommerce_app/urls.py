@@ -11,4 +11,5 @@ urlpatterns = [
     path('reduceQuantity/', QuantityReduceView.as_view(), name='quantity-reduce'),
     path('subscribe/', SubscribeView.as_view(), name='subscribe'),
     path('cartvalidate/', validate_cart),
+    path('orderCreatation/', CreateOrderAPIView.as_view(), name='create-order'),
 ]

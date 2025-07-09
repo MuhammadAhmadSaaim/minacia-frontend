@@ -1,0 +1,130 @@
+* [33md422a87[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Remove db.sqlite3 from repo and ignore it
+*   [33m113144b[m Resolve merge conflict: keep local db.sqlite3, but untrack it
+[32m|[m[33m\[m  
+[32m|[m * [33m62ebea1[m Delete backend/ecommerce_project/db.sqlite3
+[32m|[m * [33mc7d6601[m Update .gitignore
+[32m|[m *   [33m3759a8e[m Merge pull request #9 from MuhammadAhmadSaaim/ali
+[32m|[m [34m|[m[35m\[m  
+[32m|[m [34m|[m * [33mc02b577[m fixed /component/menuDrawer.js
+[32m|[m [34m|[m * [33m6aa1492[m fixed StripeSucess.jsx
+[32m|[m [34m|[m * [33me53939a[m fixed productDetails.jsx
+[32m|[m [34m|[m * [33m0cfd4cc[m fixed loginSignUp.jsx page
+[32m|[m [34m|[m * [33mbefcd76[m fixed billing.jsx
+[32m|[m [34m|[m * [33m437845c[m fixed lock.jsx: axios
+[32m|[m [34m|[m * [33m3fca87c[m fixed App.js that was supposed to fixed already
+[32m|[m [34m|[m[34m/[m  
+* [34m/[m [33m79e9684[m Local backup: db.sqlite3 and full_backup.json
+[34m|[m[34m/[m  
+* [33m2a0333d[m the detail page is fixed now out of stock work there
+* [33md1d8825[m DB Update
+*   [33m5762bec[m Merge branch 'main' of https://github.com/MuhammadAhmadSaaim/minacia-frontend
+[36m|[m[1;31m\[m  
+[36m|[m * [33m5262170[m all changes regarding the qunatity and all product page issues of adding more than in stock resolve sync the cart with backend if somehting in cart but ends in stock remove it
+[36m|[m * [33m824f01b[m login signup page is now responsive
+* [1;31m|[m [33m888f591[m Fix stipe success errors.
+* [1;31m|[m [33m2dfbf13[m Make country specifc shipping rates
+[1;31m|[m[1;31m/[m  
+[1;31m|[m * [33m0643c82[m[33m ([m[1;32mmaster[m[33m)[m login signup page is now responsive
+[1;31m|[m[1;31m/[m  
+* [33m1d05626[m footer changes and front page pics change all done
+*   [33m13c4e2a[m color seclection front page changes banner change footer change tiktok paymentinfo and billinginfo stripe payment chnages done
+[1;33m|[m[1;34m\[m  
+[1;33m|[m * [33m233ceb2[m[33m ([m[1;31morigin/zain[m[33m)[m everything till last all product detials and description added with dynamic taxation and shipping logic everything working till now navbar responsiveness is done
+[1;33m|[m * [33m4a45c2f[m stripe all done
+[1;33m|[m * [33m3e88e7e[m Remove Keys from Code
+[1;33m|[m * [33me629069[m env created
+[1;33m|[m * [33m4bdeb70[m Move stripe secret key to settings.py (removal keys)
+[1;33m|[m * [33m89a0770[m Make stripe hosted checkout work. Fix Incoming data
+[1;33m|[m * [33me94bcd2[m Stripe in process. API not working (Removal Secrets)
+* [1;34m|[m   [33m0cff6e8[m adding all changes before stripe pull npm install npm error code ENOENT npm error syscall open npm error path /home/valarmorghulis/Desktop/minacia_complete/package.json npm error errno -2 npm error enoent Could not read package.json: Error: ENOENT: no such file or directory, open '/home/valarmorghulis/Desktop/minacia_complete/package.json' npm error enoent This is related to npm not being able to find a file. npm error enoent npm error A complete log of this run can be found in: /home/valarmorghulis/.npm/_logs/2025-06-25T20_40_46_494Z-debug-0.log
+[1;35m|[m[1;36m\[m [1;34m\[m  
+[1;35m|[m * [1;34m|[m [33m0f5ee9d[m Update settings.py for deploying and making url for admin panel
+[1;35m|[m [1;34m|[m[1;34m/[m  
+[1;35m|[m *   [33m381ea57[m Merge branch 'main' of https://github.com/MuhammadAhmadSaaim/minacia-frontend
+[1;35m|[m [31m|[m[32m\[m  
+[1;35m|[m [31m|[m * [33mb4038d7[m Update lock.jsx to remove latest error
+[1;35m|[m * [32m|[m [33m2a14e58[m Fix lock page Title
+[1;35m|[m [32m|[m[32m/[m  
+[1;35m|[m * [33m9ff5493[m Make title one line, Fix background Image, change tab logo
+[1;35m|[m * [33mbb1615c[m Update App.js for deployment of lock js
+[1;35m|[m * [33ma00c548[m Update App.js to show only lock screen
+[1;35m|[m * [33md721212[m Update index.html
+[1;35m|[m * [33mb969a1c[m Update productListing.jsx
+[1;35m|[m * [33mdba5fcc[m Update lock.jsx
+[1;35m|[m * [33m7dd04a8[m Update billing.jsx
+[1;35m|[m * [33m2ffbda2[m some changes for deployment
+* [32m|[m [33m46c3028[m Update tab icon and Lock page line issues of not wraping
+[32m|[m[32m/[m  
+* [33md1ee5b5[m Add Subscriber model, backend logic forlock page, and frontend integration for lock email feature
+* [33ma77a04a[m all updates are done
+* [33m4cb107f[m[33m ([m[1;31morigin/minal[m[33m)[m WIP: temporary changes before switching to main
+* [33m3ebf304[m Save local changes before pulling
+*   [33m167cbc4[m Merge branch 'main' into minal
+[33m|[m[34m\[m  
+[33m|[m * [33m9632619[m minor changes
+[33m|[m * [33m9aa0ea7[m added extr products
+[33m|[m * [33mee5917c[m 95% front end done
+[33m|[m *   [33m786f16a[m Merge pull request #7 from MuhammadAhmadSaaim/minal
+[33m|[m [35m|[m[36m\[m  
+* [35m|[m [36m|[m [33m0f9abda[m everything is complete until payment .env file is not in commit cuz have client id ask me otherwise payment will not work
+* [35m|[m [36m|[m [33m2e7f308[m Every thing is working just a bit problem in login signup page every filter is working and everything is comming from database
+* [35m|[m [36m|[m [33m0a23660[m django admin panel done with custom name models are done with registeration in admin panel different apps are done like auth and payment need to send call to api made
+[36m|[m [35m|[m[36m/[m  
+[36m|[m[36m/[m[35m|[m   
+* [35m|[m [33mb52d2f4[m navbar navigation clicks  login signup not responsive for mobile  screen listing header centered triangles done faq page is done privacy policy page done
+[35m|[m[35m/[m  
+* [33mde603f6[m contact us linked
+*   [33m0a7f0f5[m Merge pull request #6 from MuhammadAhmadSaaim/zain
+[1;31m|[m[1;32m\[m  
+[1;31m|[m * [33mb8a100e[m Contact Us page Done. Icons and links remaining.
+* [1;32m|[m [33mc6be70e[m Home changes in components
+* [1;32m|[m [33m13e373a[m Home done
+* [1;32m|[m [33m6b2bd5a[m all products done
+* [1;32m|[m [33m89c2c9e[m Merge pull request #5 from MuhammadAhmadSaaim/zain
+[1;33m|[m[1;32m\[m[1;32m|[m 
+[1;33m|[m *   [33m727ac92[m Merge branch 'main' into zain
+[1;33m|[m [1;35m|[m[1;33m\[m  
+[1;33m|[m [1;35m|[m[1;33m/[m  
+[1;33m|[m[1;33m/[m[1;35m|[m   
+* [1;35m|[m [33m83f9492[m listing card done
+* [1;35m|[m [33me9a2fdc[m listing product card done
+* [1;35m|[m   [33mc49b2a3[m Merge pull request #4 from MuhammadAhmadSaaim/minal
+[31m|[m[32m\[m [1;35m\[m  
+[31m|[m * [1;35m\[m   [33m573dca5[m Merge branch 'main' into minal
+[31m|[m [33m|[m[31m\[m [1;35m\[m  
+[31m|[m [33m|[m[31m/[m [1;35m/[m  
+[31m|[m[31m/[m[33m|[m [1;35m|[m   
+* [33m|[m [1;35m|[m [33m9de5549[m Navbar web done, home updated
+* [33m|[m [1;35m|[m   [33m78d9d26[m Merge pull request #3 from MuhammadAhmadSaaim/saba
+[35m|[m[36m\[m [33m\[m [1;35m\[m  
+[35m|[m * [33m|[m [1;35m|[m [33m7d52d64[m[33m ([m[1;31morigin/saba[m[33m)[m allProducts page implemented
+[35m|[m[35m/[m [33m/[m [1;35m/[m  
+[35m|[m * [1;35m|[m [33mf14146c[m product listing page with animations done
+[35m|[m [36m|[m * [33m9073315[m Checkout Page done. Have to refactor it into components when DB connected.
+[35m|[m [36m|[m * [33m2d118ac[m cart page mobile version done. TODO: make for larger screens
+[35m|[m [36m|[m[35m/[m  
+[35m|[m[35m/[m[36m|[m   
+* [36m|[m [33m07af9f1[m ProductDetails page
+[36m|[m[36m/[m  
+*   [33md09f9e1[m Merge pull request #2 from MuhammadAhmadSaaim/minal
+[1;31m|[m[1;32m\[m  
+[1;31m|[m *   [33mfef7878[m Merge branch 'main' into minal
+[1;31m|[m [1;33m|[m[1;31m\[m  
+[1;31m|[m [1;33m|[m[1;31m/[m  
+[1;31m|[m[1;31m/[m[1;33m|[m   
+* [1;33m|[m [33m4155b0b[m changes to navbar
+[1;34m|[m * [33m0d664bd[m minal branch
+[1;34m|[m[1;34m/[m  
+*   [33m3cf5d1c[m Merge pull request #1 from MuhammadAhmadSaaim/minal
+[1;35m|[m[1;36m\[m  
+[1;35m|[m *   [33mc703294[m Merge branch 'main' into minal
+[1;35m|[m [31m|[m[1;35m\[m  
+[1;35m|[m [31m|[m[1;35m/[m  
+[1;35m|[m[1;35m/[m[31m|[m   
+* [31m|[m [33m8974908[m navbar with animation
+[32m|[m * [33m3bf4f68[m added animations to navbar
+[32m|[m[32m/[m  
+* [33mfeded07[m navbar
+* [33m27b58d9[m added footer and navbar and started home page
+* [33m0a9fdc8[m intial setup
+* [33m9c02f97[m Initialize project using Create React App

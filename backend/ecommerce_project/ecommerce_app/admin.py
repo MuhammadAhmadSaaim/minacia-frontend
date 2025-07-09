@@ -7,19 +7,14 @@ from .models import (
 )
 
 
-
-
-
-
-
 # ---------- INLINE: ColorImage for ColorVariant ----------
-class ColorImageInline(nested_admin.NestedTabularInline):  # ✅ must be nested
+class ColorImageInline(nested_admin.NestedStackedInline):  # ✅ must be nested
     model = ColorImage
     extra = 1
 
 
 # ---------- INLINE: ColorVariant for Product ----------
-class ColorVariantInline(nested_admin.NestedTabularInline):  # ✅ must be nested
+class ColorVariantInline(nested_admin.NestedStackedInline):  # ✅ must be nested
     model = ColorVariant
     inlines = [ColorImageInline]
     extra = 1

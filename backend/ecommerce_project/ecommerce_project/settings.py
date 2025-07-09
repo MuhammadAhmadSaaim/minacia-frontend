@@ -97,7 +97,7 @@ JAZZMIN_UI_TWEAKS = {
     "sidebar_nav_compact_style": False,
     "sidebar_nav_legacy_style": False,
     "sidebar_nav_flat_style": False,
-    "theme": "minty",
+    "theme": "default",
     "dark_mode_theme": None,
     "button_classes": {
         "primary": "btn-outline-primary",
@@ -114,7 +114,9 @@ JAZZMIN_SETTINGS = {
     "navigation_expanded": True,
     "show_sidebar": True,
     "custom_css": None,
-    "custom_js": None,
+    "custom_js": [
+        "https://cdn.jsdelivr.net/gh/minacia/inject-inline-style.js"
+    ],
     "site_title": "Minacia Admin",
     "site_header": "Minacia Administrator",
     "site_brand": "Minacia Admin",
@@ -122,7 +124,6 @@ JAZZMIN_SETTINGS = {
     "site_logo": None,               
     "site_icon": False,               
     "show_sidebar_user": False, 
-    "show_ui_builder": True,
     
 }
 

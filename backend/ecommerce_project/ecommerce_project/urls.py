@@ -21,7 +21,6 @@ from . import settings
 
 
 urlpatterns = [
-    
     path('admin/', admin.site.urls),
     path('nested_admin/', include('nested_admin.urls')),
     path('api/auth/', include('my_auth.urls')),

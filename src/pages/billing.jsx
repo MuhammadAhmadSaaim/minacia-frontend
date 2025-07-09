@@ -156,7 +156,8 @@ function Billing() {
             method: 'stripe',
             amount: price,
             user: id,
-            country: formData.country
+            country: formData.country,
+            items: cartItems
         };
         try {
             await saveInfo();

@@ -22,7 +22,9 @@ class CreateStripeCheckoutSession(APIView):
     
     def post(self, request):
         country = request.data.get("country")
+        cartItems = request.data.get("items")
         # Mapping of ISO country codes to shipping details (amount in pence)
+        print(cartItems)
         shipping_rate_map = {
     # Main Countries
     'GB': {'label': 'UK Standard Shipping', 'amount': 599, 'min_day': 2, 'max_day': 4},
@@ -137,23 +139,50 @@ class CreateStripeCheckoutSession(APIView):
                 }
             }
         })
+        line_items_ready = []
+        # for item in cartItems:
+        #     line_items_ready.append({
+        #         'price_data': {
+        #             'currency': 'gbp',
+        #             'product_data': {
+        #                 'name': item['name'],
+        #             },
+        #             'unit_amount': int(float(item['price']) * 100),  # Convert £25.00 to 2500 (pence)
+        #         },
+        #         'quantity': item['quantity'],
+        #     })
+        cart_items = request.data.get("cart", [])
+
+        for item in cartItems:
+            name = item['name']
+            color = item.get('selectedColor', {}).get('color_name', 'Unknown')
+            quantity = item['quantity']
+            price = float(item['price'])
+
+            line_items_ready.append({
+                'price_data': {
+                    'currency': 'gbp',
+                    'product_data': {
+                        'name': f"{name} ({color})",
+                        'description': f"Color: {color}",
+                        'metadata': {
+                            'product_id': str(item['id']),
+                            'color_id': str(item['selectedColor']['id']),
+                            'color_name': color,
+                        }
+                    },
+                    'unit_amount': int(price * 100),
+                },
+                'quantity': quantity,
+            })
+
+
         try:
             checkout_session = stripe.checkout.Session.create(
                 mode='payment',
                 shipping_address_collection={"allowed_countries": [country]},
                 shipping_options=shipping_options,
-                line_items=[
-                    {
-                        'price_data': {
-                            'currency': 'gbp',
-                            'product_data': {
-                                'name': 'All Products',
-                            },
-                            'unit_amount': int(float(request.data.get("amount")) * 100),  # in cents
-                        },
-                        'quantity': 1,
-                    }
-                ],
+                line_items=line_items_ready,
                 success_url=f'{settings.FRONTEND_URL}/stripesuccess',
                 cancel_url=f'{settings.FRONTEND_URL}/billing',
                 metadata={

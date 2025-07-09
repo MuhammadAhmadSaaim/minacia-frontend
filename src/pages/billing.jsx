@@ -95,7 +95,7 @@ function Billing() {
     }
 
     useEffect(() => {
-        fetch(`${BASE_URL}/api/listing/additionalPays/`)
+        fetch(`/api/listing/additionalPays/`)
             .then(res => res.json())
             .then(data => {
                 if (data.tax !== null && data.tax !== undefined) {
@@ -163,7 +163,7 @@ function Billing() {
             await saveInfo();
             localStorage.setItem("billingFormData", JSON.stringify(formData));
 
-            const resp = await axios.post(`${BASE_URL}/api/stripe/create-stripe-session/`, paymentInfo, {
+            const resp = await axios.post(`/api/stripe/create-stripe-session/`, paymentInfo, {
                 headers: {
                     Authorization: `Bearer ${rawToken}`,
                     'Content-Type': 'application/json',
@@ -194,7 +194,7 @@ function Billing() {
                 user: id
             };
 
-            const res = await axios.post(`${BASE_URL}/api/stripe/save-billing-info/`, billingInfo, {
+            const res = await axios.post(`/api/stripe/save-billing-info/`, billingInfo, {
                 headers: {
                     'Authorization': `Bearer ${rawToken}`,
                     'Content-Type': 'application/json',

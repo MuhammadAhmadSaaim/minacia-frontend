@@ -19,14 +19,14 @@ const ProductListing = () => {
     // Utility function to normalize image URLs
     const normalizeImageUrl = (img) => {
         if (!img) return "https://via.placeholder.com/300x300.png?text=No+Image";
-        return img.startsWith("http") ? img : `${BASE_URL}${img}`;
+        return img.startsWith("http") ? img : `${img}`;
     };
 
     useEffect(() => {
         if (!categoryId) return;
 
         setLoading(true);
-        fetch(`${BASE_URL}/api/listing/productListing/${categoryId}/`, {
+        fetch(`/api/listing/productListing/${categoryId}/`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         })

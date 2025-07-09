@@ -56,7 +56,7 @@ const AuthForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(`${BASE_URL}/api/auth/login/`, {
+      const response = await axios.post(`/api/auth/login/`, {
         username: loginUsername,
         password: loginPassword,
       });
@@ -80,7 +80,7 @@ const AuthForm = () => {
   const handleSubmitSignUp = async (event) => {
     event.preventDefault();
     try {
-      await axios.post(`${BASE_URL}/api/auth/register/`, {
+      await axios.post(`/api/auth/register/`, {
         username: signupUsername,
         email: signupEmail,
         password: signupPassword,

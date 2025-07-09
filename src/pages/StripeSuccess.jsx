@@ -37,7 +37,7 @@ const StripeSuccess = () => {
   useEffect(() => {
     const reduceQuantity = async () => {
       try {
-        await axios.post(`${BASE_URL}/api/listing/reduceQuantity/`, payload, {
+        await axios.post(`/api/listing/reduceQuantity/`, payload, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -45,14 +45,14 @@ const StripeSuccess = () => {
         });
 
 
-        const paymentRes = await axios.post(`${BASE_URL}/api/stripe/save-payment/`, {
+        const paymentRes = await axios.post(`/api/stripe/save-payment/`, {
           user: id,
           method: 'stripe',
           amount: subtotal,
           billing_info: billingInfoId,
           status: 'paid',
         });
-        await axios.post(`${BASE_URL}/api/listing/orderCreatation/`, {
+        await axios.post(`/api/listing/orderCreatation/`, {
           user: id,
           billing_info: parseInt(localStorage.getItem("billingInfoId")),
           payment: parseInt(paymentRes.data.id),

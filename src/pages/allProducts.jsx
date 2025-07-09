@@ -18,7 +18,7 @@ const AllProducts = () => {
   const productsPerPage = 12;
 
   useEffect(() => {
-    fetch(`${BASE_URL}/api/listing/productListing/`, {
+    fetch(`/api/listing/productListing/`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     })

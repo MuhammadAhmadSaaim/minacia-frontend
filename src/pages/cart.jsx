@@ -15,7 +15,7 @@ const Cart = () => {
 
 
     useEffect(() => {
-        fetch(`${BASE_URL}/api/listing/additionalPays/`)
+        fetch(`/api/listing/additionalPays/`)
             .then(res => res.json())
             .then(data => {
                 if (data.tax !== null && data.tax !== undefined) {
@@ -58,7 +58,7 @@ const Cart = () => {
 
     const getItemImage = (item) => {
         const imagePath = item.selectedColor?.images?.[0]?.image || item.images?.[0]?.image;
-        return imagePath?.startsWith("http") ? imagePath : `${BASE_URL}${imagePath}`;
+        return imagePath?.startsWith("http") ? imagePath : `${imagePath}`;
     };
 
     const handleQuantityChange = (item, newQty) => {

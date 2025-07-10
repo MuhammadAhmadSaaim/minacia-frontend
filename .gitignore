@@ -7,9 +7,6 @@ backend/ecommerce_project/env/
 # testing
 /coverage
 
-# production
-/build
-
 
 
 npm-debug.log*

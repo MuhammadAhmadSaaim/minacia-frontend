@@ -155,7 +155,7 @@ const Navbar = () => {
                                 </div>
 
 
-                                <FiSearch size={20} className="cursor-pointer transition-all duration-500" onClick={handleSearchClick} />
+                                {/* <FiSearch size={20} className="cursor-pointer transition-all duration-500" onClick={handleSearchClick} /> */}
                                 <button className="flex items-center space-x-1" onClick={handleMenuToggle}>
                                     <FiMenu size={20} />
                                     <span className="text-md font-semibold font-cormorant">MENU</span>

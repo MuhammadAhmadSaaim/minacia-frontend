@@ -183,8 +183,8 @@ class CreateStripeCheckoutSession(APIView):
                 shipping_address_collection={"allowed_countries": [country]},
                 shipping_options=shipping_options,
                 line_items=line_items_ready,
-                success_url=f'{settings.FRONTEND_URL}/stripesuccess',
-                cancel_url=f'{settings.FRONTEND_URL}/billing',
+                success_url='http://minaciasociety.com/stripesuccess',
+                cancel_url='http://minaciasociety.com/billing',
                 metadata={
                     'user_id': request.user.id,
                 }

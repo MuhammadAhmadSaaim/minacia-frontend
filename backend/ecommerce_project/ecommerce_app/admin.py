@@ -56,7 +56,7 @@ class OrderItemInline(admin.TabularInline):
 
 # ---------- ORDER ADMIN ----------
 class OrderAdmin(admin.ModelAdmin):
-    readonly_fields = [ 'tax', 'shipping_cost', 'total_items', 'order_no', 'user', 'order_amount', 'status', 'order_date']
+    readonly_fields = [ 'tax', 'shipping_cost', 'total_items', 'order_no', 'user', 'order_amount', 'order_date']
     list_filter = ['status', 'order_date']
     search_fields = ['user__username', 'billing_info__email', 'payment__method']
     ordering = ['-order_date']
